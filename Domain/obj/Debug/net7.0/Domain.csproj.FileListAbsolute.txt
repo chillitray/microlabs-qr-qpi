@@ -1,0 +1,12 @@
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/bin/Debug/net7.0/Domain.deps.json
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/bin/Debug/net7.0/Domain.dll
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/bin/Debug/net7.0/Domain.pdb
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.csproj.AssemblyReference.cache
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.AssemblyInfoInputs.cache
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.AssemblyInfo.cs
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.csproj.CoreCompileInputs.cache
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.dll
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/refint/Domain.dll
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/Domain.pdb
+/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/obj/Debug/net7.0/ref/Domain.dll
