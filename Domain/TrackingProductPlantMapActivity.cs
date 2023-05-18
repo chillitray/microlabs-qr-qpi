@@ -7,12 +7,12 @@ namespace Domain
         [Key]
         public Guid tracking_product_plant_map_id { get; set; }
         [Required]
-        public String old_obj { get; set; }
+        public String old_obj { get; set; } = "{}";
         [Required]
         public String new_obj { get; set; }
         public Guid product_plant_mapping_id { get; set; }
         public Guid user_id { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
     }
 }
 

@@ -23,10 +23,11 @@ namespace Domain
         public String location_country { get; set; }
         public String location_pincode { get; set; }
         public Guid product_id { get; set; }
+        public Guid? qr_read_activity_id { get; set; }
         public Guid qr_id { get; set; }
         [Required]
         public String ip_address { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
     }
 }
 
@@ -41,6 +42,7 @@ namespace Domain
 // location_country	TEXT
 // location_pincode	TEXT | NULLABLE
 // product_id	UUID
+// qr_read_activity_id	UUID | NULLABLE
 // qr_id	UUID
 // ip_address	Text
 // created_at	Datetime

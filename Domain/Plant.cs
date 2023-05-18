@@ -33,10 +33,10 @@ namespace Domain
         public int plant_qr_limit { get; set; }
         public Guid created_by { get; set; }
         public Guid? operated_id { get; set; }
-        public PlantStatusOptions status { get; set; }
+        public PlantStatusOptions status { get; set; } = PlantStatusOptions.ACTIVE;
         public DateTime founded_on { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime last_updated_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
+        public DateTime last_updated_at { get; set; } = DateTime.Now;
     }
 }
 
@@ -52,9 +52,8 @@ namespace Domain
 // plant_location_geo	Text
 // plant_qr_limit	Integer
 // created_by	UUID
-// operated_id	UUID | Nullable
 // status	"enum (
-//          Active=>1,        Inactive=> 2 )"
+// Active=>1,        Inactive=> 2 )"
 // founded_on	Datetime
 // created_at	Datetime
 // last_updated_at	Datetime

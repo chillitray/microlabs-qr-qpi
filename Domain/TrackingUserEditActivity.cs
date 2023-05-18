@@ -7,11 +7,11 @@ namespace Domain
         [Key]
         public Guid tracking_user_edit_id { get; set; }
         [Required]
-        public String old_obj { get; set; }
+        public String old_obj { get; set; } = "{}";
         [Required]
         public String new_obj { get; set; }
         public Guid user_id { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
     }
 }
 

@@ -7,15 +7,14 @@ namespace Domain
         [Key]
         public Guid tracking_plant_id { get; set; }
         [Required]
-        public String old_obj { get; set; }
+        public String old_obj { get; set; } = "{}";
         [Required]
         public String new_obj { get; set; }
         public Guid plant_id { get; set; }
         public Guid user_id { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
     }
 }
-
 
 // tracking_plant_id	UUID | Primary Key
 // old_obj	Text

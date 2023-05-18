@@ -4,14 +4,16 @@ namespace Domain
 {
     public enum TrackerEmailReason
     {
-        OTP_FORGOT_PASSWORD_VERIFY=1   
+        OTP_FORGOT_PASSWORD_VERIFY=1,
+        SIGN_IN=2,
+        SIGN_UP=3   
     }
 
     public enum TrackerEmailStatus
     {
-        Generated=1,
-        Sent=2,
-        NotDelivered=3
+        GENERATED=1,
+        SENT=2,
+        NOT_DELIVERED=3
     }
 
 
@@ -25,10 +27,10 @@ namespace Domain
         public String email_subject { get; set; }
         [Required]
         public String email_body { get; set; }
-        public TrackerEmailReason reason { get; set; }
-        public TrackerEmailStatus status { get; set; }
+        public TrackerEmailReason reason { get; set; } = TrackerEmailReason.SIGN_IN;
+        public TrackerEmailStatus status { get; set; } = TrackerEmailStatus.GENERATED;
         public Guid user_id { get; set; }
-        public DateTime created_at { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
         
     }
 }
@@ -37,7 +39,7 @@ namespace Domain
 // email	TEXT
 // email_subject	TEXT
 // email_body	TEXT
-// reason	enum ( OTP_FORGOT_PASSWORD_VERIFY=>1, 
+// reason	enum ( OTP_FORGOT_PASSWORD_VERIFY=>1, SIGN_IN=>2, SIGN_UP=>3)
 // status	"enum (
 // 1 -> Generated
 // 2 -> Sent    3->NotDelivered

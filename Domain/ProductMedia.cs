@@ -21,9 +21,9 @@ namespace Domain
         public ProductMediaTypeOptions media_type { get; set; }
         public Guid product_id { get; set; }
         public Guid created_by { get; set; }
-        public DateTime created_at { get; set; }
-        public DateTime last_updated_at { get; set; }
-        public PlantStatusOptions status { get; set; }
+        public DateTime created_at { get; set; } = DateTime.Now;
+        public DateTime last_updated_at { get; set; } = DateTime.Now;
+        public PlantStatusOptions status { get; set; } = PlantStatusOptions.ACTIVE;
         
     }
 }
