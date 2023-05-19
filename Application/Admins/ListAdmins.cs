@@ -11,6 +11,7 @@ namespace Application.Admins
     {
         public class Query : IRequest<PagedResult<List<FetchAdminsDto>>> {
             public PagingParams Params { get; set; }
+            public User logged_user { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, PagedResult<List<FetchAdminsDto>>>
@@ -66,7 +67,7 @@ namespace Application.Admins
                 //fetch the user_ids from the users
                 List<Guid?> user_ids = new List<Guid?>();
                 foreach(User plt in users){
-                    role_ids.Add(plt.user_id);                    
+                    user_ids.Add(plt.user_id);                    
                 }
 
                 // fetch the Role records wrt role_ids
@@ -78,7 +79,8 @@ namespace Application.Admins
                     )).ToList();
 
                 //fetch the user last_login_date_time
-                var login = _context.SessionActivity.Where(x => user_ids.Contains(x.user_id)).OrderBy(z => z.last_login).GroupBy(y=>y.user_id).ToList();
+                var login_sessions = _context.SessionActivity.Where(x => user_ids.Contains(x.user_id)).OrderBy(z => z.last_login).ToList();
+                Console.WriteLine(login_sessions.Count);
 
                 List<FetchAdminsDto> admins_details = new List<FetchAdminsDto>();
                 foreach(User user in users)
@@ -91,7 +93,8 @@ namespace Application.Admins
                         full_name = user.full_name,
                         status = user_status,
                         joined_date = user.joined_date,
-                        last_login_date = null
+                        last_login_date = null,
+                        me=false
                     };
                     foreach(RoleDetailsDto role in roles){
                         if(user.role_id == role.role_id){
@@ -99,11 +102,18 @@ namespace Application.Admins
                             break;
                         }
                     }
-
-                    foreach(SessionActivity log in login){
-                        if(user.user_id == log.user_id){
-                            data.last_login_date = log.last_login;
-                        }
+                    var login = login_sessions.Where(x=>x.user_id == user.user_id).OrderByDescending(x=>x.last_login).ToList();
+                    if(login.Count>0){
+                        data.last_login_date = login[0].last_login;
+                    }
+                    
+                    // foreach(SessionActivity log in login){
+                    //     if(user.user_id == log.user_id){
+                    //         data.last_login_date = log.last_login;
+                    //     }
+                    // }
+                    if(request.logged_user.user_id == user.user_id){
+                        data.me = true;
                     }
                     admins_details.Add(data);
                 }
