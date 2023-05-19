@@ -34,7 +34,10 @@ namespace API.Controllers
         public async Task<IActionResult> GetAdmins([FromQuery] PagingParams param) //[FromQuery]PagingParams param
         {
             //  this api fetches all the admins
-            var result = await Mediator.Send(new ListAdmins.Query { Params = param });
+
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
+            var result = await Mediator.Send(new ListAdmins.Query { Params = param, logged_user = logged_user });
             if (result == null) return NotFound();
             return Ok(PagedResult<List<FetchAdminsDto>>.Success(result.Value, result.PageNumber, result.PageSize, result.TotalRecords));
         }
@@ -82,20 +85,20 @@ namespace API.Controllers
             var new_users = new List<User>{
                     new User
                     {
+                        Email = details.Email,                        
                         emp_id = details.emp_id,
                         full_name = details.full_name,
                         role_id = details.role_id,
                         plant_id = details.plant_id,
-                        created_by = logged_user.user_id,
-                        //IdentityUser Mandatory fields
-                        Email = details.Email,
-                        UserName = username
+                        UserName = username,
+                        created_by = logged_user.user_id                        
                     }
                 };
 
-            foreach(User user in new_users){
+            foreach(User user_record in new_users){
                     Console.WriteLine("Hello234");
-                    var result = await _userManager.CreateAsync(user, "Pa$$w0rd");
+                    var result =await _userManager.CreateAsync(user_record, password);
+                    Console.WriteLine("Hello234");
                     Console.WriteLine(result);
                     if (!result.Succeeded) return NotFound("unable to add user. please try again");
             }
