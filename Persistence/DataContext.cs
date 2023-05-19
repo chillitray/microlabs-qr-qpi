@@ -20,7 +20,7 @@ namespace Persistence
         // public DbSet<Activity> Activites { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<User> User { get; set; }
-        public DbSet<Employee> Employee { get; set; }
+        // public DbSet<Employee> Employee { get; set; }
         public DbSet<TrackingUserEditActivity> TrackingUserEditActivity { get; set; }
         public DbSet<SessionActivity> SessionActivity { get; set; }
         public DbSet<InactiveSessionActivity> InactiveSessionActivity { get; set; }
