@@ -5,6 +5,7 @@ using API.Services;
 using API.Soap;
 using Application.Core;
 using Application.Plants;
+using Domain;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
@@ -69,6 +70,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 
 // app.UseHttpsRedirection();
 

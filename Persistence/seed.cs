@@ -37,33 +37,69 @@ namespace Persistence
             // await context.SaveChangesAsync();
 
 
-            var products = new List<ProductManagement>
-            {
-                new ProductManagement
-                {
-                    product_name = "Dolo-650",
-                    product_description = "Dolo-650 product description",
-                    product_logo="temp_logo",
-                    product_writeup="temp writeup",
-                    product_expiry_days=100,
-                    product_mrp=50,
-                    created_by = new Guid("1093e3a1-8170-4004-9385-1994f6715536")
-                }
-            };
+            // var products = new List<ProductManagement>
+            // {
+            //     new ProductManagement
+            //     {
+            //         product_name = "Dolo-650",
+            //         product_description = "Dolo-650 product description",
+            //         product_logo="temp_logo",
+            //         product_writeup="temp writeup",
+            //         product_expiry_days=100,
+            //         product_mrp=50,
+            //         created_by = new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     }
+            // };
 
-            await context.ProductManagement.AddRangeAsync(products);
+            // await context.ProductManagement.AddRangeAsync(products);
             // Console.WriteLine("Hello");
             // var users = new List<User>
             // {
                 
             //     new User
             //     {
-            //         Email = "navaneeswar@zintlr.com",
-            //         emp_id = "EMP001",
-            //         full_name = "Navaneeswar Reddy Challa",
+            //         Email = "ravi@zintlr.com",
+            //         emp_id = "EMP002",
+            //         full_name = "Ravi Jain",
             //         role_id = new Guid("4f99b3c5-48ea-47dd-502a-08db56d63737"),
-            //         UserName = "navaneeswar"
-            //         // created_by = new Guid("930e0d95-7a3f-4bb5-abc3-08db5165c970")
+            //         UserName = "ravi",
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     },
+            //     new User
+            //     {
+            //         Email = "srinidhi@zintlr.com",
+            //         emp_id = "EMP003",
+            //         full_name = "Srinidhi Athreyas",
+            //         role_id = new Guid("4f99b3c5-48ea-47dd-502a-08db56d63737"),
+            //         UserName = "srinidhi",
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     },
+            //     new User
+            //     {
+            //         Email = "dipak@zintlr.com",
+            //         emp_id = "EMP004",
+            //         full_name = "Dipak Patil",
+            //         role_id = new Guid("4f99b3c5-48ea-47dd-502a-08db56d63737"),
+            //         UserName = "dipak",
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     },
+            //     new User
+            //     {
+            //         Email = "ujwal@zintlr.com",
+            //         emp_id = "EMP005",
+            //         full_name = "Ujwal Kumar",
+            //         role_id = new Guid("4f99b3c5-48ea-47dd-502a-08db56d63737"),
+            //         UserName = "ujwal",
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     },
+            //     new User
+            //     {
+            //         Email = "sana@zintlr.com",
+            //         emp_id = "EMP005",
+            //         full_name = "Sana Ismail",
+            //         role_id = new Guid("4f99b3c5-48ea-47dd-502a-08db56d63737"),
+            //         UserName = "sana",
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
             //     }
             // };
             // foreach(User user in users){
@@ -92,15 +128,15 @@ namespace Persistence
             // };
             // await context.ProductPlantMapping.AddRangeAsync(mapping);
 
-            var mapping = new List<RateLimits>{
-                new RateLimits
-                {
-                    rate_type = RateTypeOptions.MAX_LOGIN_FAILED_ATTEMPTS,
-                    max_allowed_per_day = 3,
-                    created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
-                }
-            };
-            await context.RateLimits.AddRangeAsync(mapping);
+            // var mapping = new List<RateLimits>{
+            //     new RateLimits
+            //     {
+            //         rate_type = RateTypeOptions.MAX_LOGIN_FAILED_ATTEMPTS,
+            //         max_allowed_per_day = 3,
+            //         created_by=new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     }
+            // };
+            // await context.RateLimits.AddRangeAsync(mapping);
 
             // var mapping = new List<RangeTable>{
             //     new RangeTable

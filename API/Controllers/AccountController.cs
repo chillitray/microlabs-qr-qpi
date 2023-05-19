@@ -76,7 +76,7 @@ namespace API.Controllers
                         EmailBody = emailBody
                     };
 
-                    var status = _emailService.SendEmail(emailData);
+                    var status = _emailService.SendEmail(emailData,1);
                     // add record in trackerEmail
                     var option = TrackerEmailStatus.GENERATED;
                     if (status)
@@ -294,7 +294,7 @@ namespace API.Controllers
                 EmailBody = emailBody
             };
 
-            var status = _emailService.SendEmail(emailData);
+            var status = _emailService.SendEmail(emailData,1);
             // add record in trackerEmail
             var option = TrackerEmailStatus.GENERATED;
             if (status)
@@ -388,7 +388,7 @@ namespace API.Controllers
 
             var password = await _userManager.ChangePasswordAsync(logged_user,change.oldPassword,change.newPassword);
 
-            Console.WriteLine(password);
+            // Console.WriteLine(password);
             // var result2 = await _userManager.SaveChangesAsync() > 0;
             if (!password.Succeeded)
             {
@@ -407,14 +407,14 @@ namespace API.Controllers
             var utils = new Utils();
             List<String> numbers = new List<String>();
 
-            var num ="000";
-            // while(true){
-                num = utils.GenerateNextString("ZZZZZZZY");
+            var num ="0000000000";
+            while(true){
+                num = utils.GenerateNextString(num);
                 numbers.Add(num);
-                // if(numbers.Count() >= 46656){
-                //     // break;
-                // }
-            // }
+                if(numbers.Count() >= 100){
+                    break;
+                }
+            }
             
 
             return Ok(numbers);

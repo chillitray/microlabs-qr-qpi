@@ -1,5 +1,6 @@
 using System.Net;
 using API.DTOs;
+using Domain;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -21,6 +22,8 @@ namespace API.Middleware
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            
+
             var db = context.HttpContext.RequestServices.GetRequiredService<DataContext>();
             var ip_add =  context.HttpContext.Connection.RemoteIpAddress.ToString();
 
@@ -32,6 +35,17 @@ namespace API.Middleware
 
             var _token = Authorization.FirstOrDefault();
             Guid _userId =new Guid(UserId.FirstOrDefault());
+            
+            if(_AccessLevel.ToString() == "ROLE" & _token == null){
+                var users = db.User.Where(x=>true).Count();
+                Console.WriteLine("UsersCount:" + users);
+                if(users<1){
+                    // if no users present on the db then we can allow anonymus to create role 
+                    return;
+                }
+            }
+            
+
             if (_token != null)
             {
                 Guid userId = _userId;
@@ -101,8 +115,8 @@ namespace API.Middleware
                 // Console.WriteLine(4);
                 return false;
             }
-
-            if(_AccessLevel.ToString() != "BOTH" & role.access_level.ToString() != _AccessLevel.ToString() ){
+            if(_AccessLevel.ToString() == "ROLE" & role.access_level != AccessLevelOptions.ADMIN) return false;
+            else if(_AccessLevel.ToString() != "ROLE" & _AccessLevel.ToString() != "BOTH" & role.access_level.ToString() != _AccessLevel.ToString() ){
                 // Console.WriteLine(5);
                 return false;
             }

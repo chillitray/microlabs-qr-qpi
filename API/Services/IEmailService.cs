@@ -4,6 +4,6 @@ namespace API.Services
 {
     public interface IEmailService
     {
-        bool SendEmail(EmailData emailData);
+        bool SendEmail(EmailData emailData, int flag);
     }
 }

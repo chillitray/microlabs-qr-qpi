@@ -63,13 +63,13 @@ namespace API.Controllers
         {
             var skip = (param.pageNumber - 1) * param.PageSize ;
 
-            var email =await _context.QrManagement.Where(x => true).ToListAsync();
-            var count = email.Count;
+            var email_x =await _context.QrManagement.Where(x => true).ToListAsync();
+            var count = email_x.Count;
 
             //sort the records in descending order and fetch the product ids
-            email = email.OrderByDescending(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
+            var email = email_x.OrderByDescending(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
             if(!param.Sort){
-                email = email.OrderBy(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
+                email = email_x.OrderBy(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
             }
 
             List<Guid> plant_ids = new List<Guid>();

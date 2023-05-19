@@ -9,6 +9,7 @@ namespace API.DTOs
     {
         ADMIN,       
         PLANT_MANAGER,
-        BOTH
+        BOTH,
+        ROLE
     }
 }

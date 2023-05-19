@@ -28,7 +28,7 @@ namespace Application.Admins
                 var skip = (request.Params.pageNumber - 1) * request.Params.PageSize ;
 
                 //  fetch all the users from the db
-                var users_x = await _context.User.Where(x => x.user_id != null).ToListAsync();
+                var users_x = await _context.User.Where(x => true).ToListAsync();
 
                 // get the count of users
                 var users_count = users_x.Count();
