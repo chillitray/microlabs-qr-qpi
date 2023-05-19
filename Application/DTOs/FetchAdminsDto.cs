@@ -24,5 +24,6 @@ namespace Application.DTOs
         public String status { get; set; }
         public DateTime joined_date { get; set; }
         public DateTime? last_login_date { get; set; }
+        public bool me { get; set; } = false;
     }
 }
