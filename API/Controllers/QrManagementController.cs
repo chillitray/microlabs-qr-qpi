@@ -3,6 +3,7 @@ using API.DTOs;
 using API.Middleware;
 using Application.Core;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Persistence;
 
 namespace API.Controllers
 {
-    [CustomAuthorization(AccessLevelsDto.ADMIN)]
+    
     [ApiController]
     [Route("api/[controller]")]
     public class QrManagementController : ControllerBase
@@ -25,7 +26,7 @@ namespace API.Controllers
             
         }
 
-
+        [CustomAuthorization(AccessLevelsDto.ADMIN)]
         [HttpPost("edit/")]
         public async Task<ActionResult> Edit(QrManagementFetchDto managementDto)
         {
@@ -58,6 +59,8 @@ namespace API.Controllers
 
         }
 
+
+        [CustomAuthorization(AccessLevelsDto.ADMIN)]
         [HttpPost("get/all/")]
         public async Task<PagedResult<List<QrManagementDto>>> FetchSmtpRecords([FromQuery]PagingParams param)
         {
@@ -147,6 +150,8 @@ namespace API.Controllers
         }
 
 
+
+        [CustomAuthorization(AccessLevelsDto.ADMIN)]
         [HttpPost("get/{qr_id}")]
         public async Task<ActionResult<QrManagementDto>> FetchQrDetails(Guid qr_id)
         {
@@ -197,6 +202,57 @@ namespace API.Controllers
                         plant_name = plant.plant_name,
                         product_name = product.product_name,
                         updated_name = user.full_name
+            });
+            
+
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("public/{qr_id}")]
+        public async Task<ActionResult<ProductInfoDto>> FetchPublicQrDetails(String qr_id)
+        {
+            // verify whether the plant had a key already
+            var QrKey =await _context.QrManagement.Where(x => x.public_id == qr_id).ToListAsync();
+            if(QrKey.Count<1){
+                return NotFound("Record not found");
+            }
+            else if(QrKey[0].status != QrManagementStatus.PRINTED){
+                return NotFound("Record not found");
+            }
+            //fetch the plant details
+            var plant = _context.Plant.Find(QrKey[0].plant_id);
+            //fetch the product details
+            var product = new ProductManagement();
+            if(QrKey[0].product_id!=null){
+                product = _context.ProductManagement.Find(QrKey[0].product_id);
+            }
+            //fetch the clients ip address           
+            var ip_add = HttpContext.Connection.RemoteIpAddress.ToString();
+            //create a record in QrReadActivity
+            _context.QrReadActivity.Add(
+                new QrReadActivity{
+                    qr_id = QrKey[0].qr_id,
+                    product_id = QrKey[0].product_id ?? Guid.NewGuid(),
+                    ip_address = ip_add
+                }
+            );
+            if(!(await _context.SaveChangesAsync()>0)){
+                return NotFound("Record not found");
+            }
+            return Ok(new ProductInfoDto{
+                        public_id = QrKey[0].public_id,
+                        manufactured_date = QrKey[0].manufactured_date,
+                        expiry_date = QrKey[0].expiry_date,
+                        product_mrp_copy = QrKey[0].product_mrp_copy,
+                        pack_id = QrKey[0].pack_id,
+                        serial_number = QrKey[0].serial_number,
+                        batch_no = QrKey[0].batch_no,
+                        plant_name = plant.plant_name,
+                        product_name = product.product_name,
+                        product_logo = product.product_logo,
+                        product_writeup = product.product_writeup,
+                        plant_location_geo = plant.plant_location_geo
             });
             
 
