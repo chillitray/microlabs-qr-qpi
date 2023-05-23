@@ -95,14 +95,14 @@ namespace API.Controllers
         
         
         [HttpPost("get/all/")]
-        public async Task<PagedResult<List<NotificationTypeDto>>> FetchSmtpRecords([FromQuery]PagingParams param)
+        public async Task<PagedResult<List<NotificationTypeDto>>> FetchAllRecords([FromQuery]PagingParams param)
         {
             var skip = (param.pageNumber - 1) * param.PageSize ;
 
             var email_x =await _context.NotificationTypeManagement.Where(x => true).ToListAsync();
             var count = email_x.Count;
 
-            //sort the records in descending order and fetch the product ids
+            //sort the records in descending order
             var email = email_x.OrderByDescending(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
             if(!param.Sort){
                 email = email_x.OrderBy(x => x.created_at).Skip(skip).Take(param.PageSize).ToList();
