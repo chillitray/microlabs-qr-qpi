@@ -17,12 +17,12 @@ namespace API.Soap
             this._httpContext = httpContext;
             // this._config = config;
             this._context = context;
-            Console.WriteLine("COnstructor");
+            // Console.WriteLine("COnstructor");
         }
 
         public string Test(string s)
         {
-            Console.WriteLine("Test Method Executed!");
+            // Console.WriteLine("Test Method Executed!");
             return s;
         }
 

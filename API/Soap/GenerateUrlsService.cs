@@ -34,7 +34,7 @@ namespace API.Soap
         public List<String> GenerateShortUrls(String Token,int Quantity){
             // var ip = _
             var ip = _httpContext.HttpContext.Connection.RemoteIpAddress.ToString();
-            Console.WriteLine(ip);
+            // Console.WriteLine(ip);
             var sessions = _context.PlantSessionManagement.Where(x => x.plant_access_token == Token & x.status==PlantSessionManagementStatus.GENERATED & x.expired_at >= DateTime.Now).ToList();
             if(sessions.Count <1){
                 // Console.WriteLine("Hello - unauthorized");
