@@ -28,9 +28,9 @@ namespace API.Controllers
         [HttpPost("create/")]
         public async Task<IActionResult> Create(RoleDto roleDto)
         {
-            Console.WriteLine("HELLO");
+            // Console.WriteLine("HELLO");
             // var access_level_ip = access_level;
-            Console.WriteLine(roleDto.access);
+            // Console.WriteLine(roleDto.access);
             var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             var access_dict = new Dictionary<string, AccessLevelOptions>(){

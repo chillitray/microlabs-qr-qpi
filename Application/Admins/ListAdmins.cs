@@ -80,7 +80,7 @@ namespace Application.Admins
 
                 //fetch the user last_login_date_time
                 var login_sessions = _context.SessionActivity.Where(x => user_ids.Contains(x.user_id)).OrderBy(z => z.last_login).ToList();
-                Console.WriteLine(login_sessions.Count);
+                // Console.WriteLine(login_sessions.Count);
 
                 List<FetchAdminsDto> admins_details = new List<FetchAdminsDto>();
                 foreach(User user in users)

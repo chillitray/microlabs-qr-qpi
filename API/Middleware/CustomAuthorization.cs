@@ -38,7 +38,7 @@ namespace API.Middleware
             
             if(_AccessLevel.ToString() == "ROLE" & _token == null){
                 var users = db.User.Where(x=>true).Count();
-                Console.WriteLine("UsersCount:" + users);
+                // Console.WriteLine("UsersCount:" + users);
                 if(users<1){
                     // if no users present on the db then we can allow anonymus to create role 
                     return;

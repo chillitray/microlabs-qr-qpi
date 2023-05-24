@@ -61,11 +61,11 @@ namespace API.Controllers
             //since we are using Identity package for Authentication purpose username is mandatory in User table
             // so generating the random username
             var username = Guid.NewGuid().ToString("N");
-            Console.WriteLine("username: "+username);
+            // Console.WriteLine("username: "+username);
             //generarte a random password
             var utils = new Utils();
             var password = utils.RandomPassword();
-            Console.WriteLine("password: "+password);
+            // Console.WriteLine("password: "+password);
 
             //check given role_id is valid or not
             var role = _context.Role.Find(details.role_id);
@@ -96,10 +96,10 @@ namespace API.Controllers
                 };
 
             foreach(User user_record in new_users){
-                    Console.WriteLine("Hello234");
+                    // Console.WriteLine("Hello234");
                     var result =await _userManager.CreateAsync(user_record, password);
-                    Console.WriteLine("Hello234");
-                    Console.WriteLine(result);
+                    // Console.WriteLine("Hello234");
+                    // Console.WriteLine(result);
                     if (!result.Succeeded) return NotFound("unable to add user. please try again");
             }
             

@@ -28,7 +28,7 @@ namespace API.Soap
 
         public void XmlMethod(XElement xml)
         {
-            Console.WriteLine(xml.ToString());
+            // Console.WriteLine(xml.ToString());
         }
 
         public PlantSessionDto PlantLogin(String Key, String PlantId)

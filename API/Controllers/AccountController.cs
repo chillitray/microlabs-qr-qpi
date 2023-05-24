@@ -282,7 +282,7 @@ namespace API.Controllers
             
             // var link = Url.Action(nameof(AccountController), "password/reset/", new { token, email = logged_user.Email }, Request.Scheme);
             string link = Request.Scheme + "://" + Request.Host + "/api/account/password/verify/?token="+token;
-            Console.WriteLine(link);
+            // Console.WriteLine(link);
             var emailSubject = "MicroLabs - Forgot Password";
             var emailBody = "Click on the link to reset the password " + link;
 
