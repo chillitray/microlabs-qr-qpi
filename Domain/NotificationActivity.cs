@@ -8,7 +8,7 @@ namespace Domain
         public Guid notification_activity_id { get; set; }
         public Guid notification_id { get; set; }
         public Guid user_id { get; set; }
-        public DateTime first_read_at { get; set; }
+        public DateTime? first_read_at { get; set; }
         public int read_count { get; set; } = 0;
         public DateTime created_at { get; set; } = DateTime.Now;
         public DateTime last_updated_at { get; set; } = DateTime.Now;

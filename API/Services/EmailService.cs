@@ -29,7 +29,7 @@ namespace API.Services
             }
             var email_Db = _context.SmtpConfig.Where(x=>x.email_type == type).ToList();
             if(email_Db.Count==0){
-                Console.WriteLine("SMTP Config details are not found over DB");
+                // Console.WriteLine("SMTP Config details are not found over DB");
                 return false;
             }
 
@@ -40,7 +40,7 @@ namespace API.Services
 
             //check if the email limit exceeded 
             if(email_Db[0].max_emails_per_day <= tracker_count){
-                Console.WriteLine("Email Limit exceeded");
+                // Console.WriteLine("Email Limit exceeded");
                 return false;
             }
             
@@ -76,7 +76,7 @@ namespace API.Services
             catch(Exception ex)
             {
                 //Log Exception Details
-                Console.WriteLine(ex);
+                // Console.WriteLine(ex);
                 return false;
             }
         }

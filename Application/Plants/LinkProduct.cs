@@ -59,11 +59,11 @@ namespace Application.Plants
                 });
                 
                 
-                Console.WriteLine("Hello");
+                // Console.WriteLine("Hello");
 
                 // save the changes to the DB
                 var result = await _context.SaveChangesAsync() > 0;
-                Console.WriteLine(result);
+                // Console.WriteLine(result);
                 if(!result) return Result<Unit>.Failure("Failed to Map");
                 
                 return Result<Unit>.Success(Unit.Value);

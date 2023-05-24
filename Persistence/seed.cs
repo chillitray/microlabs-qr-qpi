@@ -146,6 +146,13 @@ namespace Persistence
             // };
             // await context.RangeTable.AddRangeAsync(mapping);
 
+            // context.NotificationActivity.Add(
+            //     new NotificationActivity{
+            //         notification_id = new Guid("ead6b428-5668-4a69-add7-08db5b9e5fe0"),
+            //         user_id = new Guid("1093e3a1-8170-4004-9385-1994f6715536")
+            //     }
+            // );
+
 
             await context.SaveChangesAsync();
         }
