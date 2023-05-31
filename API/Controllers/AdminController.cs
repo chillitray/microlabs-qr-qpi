@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
 using API.Services;
+using API.Trackers;
 using Application.Admins;
 using Application.Core;
 using Application.DTOs;
@@ -82,8 +83,8 @@ namespace API.Controllers
                 if (plant.status != PlantStatusOptions.ACTIVE) return NotFound("plant is in inactive state");
             }
 
-            var new_users = new List<User>{
-                    new User
+            var new_users = new List<User>{ 
+                new User
                     {
                         Email = details.Email,                        
                         emp_id = details.emp_id,
@@ -103,6 +104,16 @@ namespace API.Controllers
                     if (!result.Succeeded) return NotFound("unable to add user. please try again");
             }
             
+            // var new_user_db = _context.User.Where(x => x.Email == details.Email).ToList().First();
+            // //format the data to string
+            // var new_obj_string = new TrackerUtils().CreateUserbj(new_user_db);
+            // _context.TrackingUserEditActivity.Add(
+            //     new TrackingUserEditActivity{
+            //         new_obj = new_obj_string,
+            //         user_id = new_users[0].user_id,
+            //         edited_by = logged_user.user_id
+            //     }
+            // );
 
             //send a mail to the user
             var emailSubject = "MicroLabs";
@@ -161,10 +172,25 @@ namespace API.Controllers
                 return NotFound("Invalid user_id");
             }
             var user = users[0];
+            // //format the data to string
+            // var old_obj_string = new TrackerUtils().CreateUserbj(user);
+
             user.plant_id= details.plant_id ?? user.plant_id;
             user.full_name = details.full_name ?? user.full_name;
             user.role_id = details.role_id ?? user.role_id;
             user.last_updated_at = DateTime.Now;
+
+            // //format the data to string
+            // var new_obj_string = new TrackerUtils().CreateUserbj(user);
+            // _context.TrackingUserEditActivity.Add(
+            //     new TrackingUserEditActivity{
+            //         old_obj = old_obj_string,
+            //         new_obj = new_obj_string,
+            //         user_id = user.user_id,
+            //         edited_by = logged_user.user_id
+            //     }
+            // );
+
 
             var result =await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to edit the details");
@@ -185,6 +211,9 @@ namespace API.Controllers
                 return NotFound("Invalid user_id");
             }
             var user = users[0];
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateUserbj(user);
+
 
             var status_dict = new Dictionary<string, USerStatusOptions>(){
                 {"ACTIVE", USerStatusOptions.ACTIVE},
@@ -193,6 +222,16 @@ namespace API.Controllers
             user.status = status_dict[details.status];
             user.last_updated_at = DateTime.Now;
             
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateUserbj(user);
+            _context.TrackingUserEditActivity.Add(
+                new TrackingUserEditActivity{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    user_id = user.user_id,
+                    edited_by = logged_user.user_id
+                }
+            );
 
             var result =await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to update the user status");

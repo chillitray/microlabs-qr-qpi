@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Trackers;
 using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -40,12 +41,22 @@ namespace API.Controllers
             
 
             //create the record in the db
-            _context.NotificationTypeManagement.Add(
+            var newRecord = _context.NotificationTypeManagement.Add(
                 new NotificationTypeManagement{
                     notifiication_type = managementDto.notifiication_type,
                     priority = type_dict[managementDto.priority],
                     notification_for = managementDto.notification_for,
                     created_by = logged_user.user_id
+                }
+            );
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateNotificationTypeObj(newRecord.Entity);
+            _context.TrackingNotificationManagement.Add(
+                new TrackingNotificationManagement{
+                    new_obj = new_obj_string,
+                    notification_type_id = newRecord.Entity.notification_type_id,
+                    user_id = logged_user.user_id
                 }
             );
 
@@ -60,12 +71,15 @@ namespace API.Controllers
         [HttpPost("edit/")]
         public async Task<ActionResult> Edit(NotificationTypeDto managementDto)
         {
-            // var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             var noti =await _context.NotificationTypeManagement.FindAsync(managementDto.notification_type_id);
             if(noti==null){
                 return NotFound("Record not found");
             }
+
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateNotificationTypeObj(noti);
 
             noti.notifiication_type = managementDto.notifiication_type ?? noti.notifiication_type;
             if(managementDto.priority != null){
@@ -83,6 +97,16 @@ namespace API.Controllers
             }
 
             noti.last_updated_at = DateTime.Now;
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateNotificationTypeObj(noti);
+            _context.TrackingNotificationManagement.Add(
+                new TrackingNotificationManagement{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    notification_type_id = noti.notification_type_id,
+                    user_id = logged_user.user_id
+                }
+            );
 
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;

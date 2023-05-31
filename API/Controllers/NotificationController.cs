@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Trackers;
 using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -41,13 +42,23 @@ namespace API.Controllers
             }
 
             //create the record in the db
-            _context.Notification.Add(
+            var newRecord =_context.Notification.Add(
                 new Notification
                 {
                     notification_content = managementDto.notification_content,
                     notification_type = managementDto.notification_type ?? new Guid(),
                     redirect_url = managementDto.redirect_url,
                     created_by = logged_user.user_id
+                }
+            );
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateNotificationObj(newRecord.Entity);
+            _context.TrackingNotification.Add(
+                new TrackingNotification{
+                    new_obj = new_obj_string,
+                    notification_id = newRecord.Entity.notification_id,
+                    user_id = logged_user.user_id
                 }
             );
 
@@ -64,13 +75,16 @@ namespace API.Controllers
         [HttpPost("edit/")]
         public async Task<ActionResult> Edit(CreateNotificationDto managementDto)
         {
-            // var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             var noti = await _context.Notification.FindAsync(managementDto.notification_id);
             if (noti == null)
             {
                 return NotFound("Record not found");
             }
+
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateNotificationObj(noti);
 
             noti.notification_content = managementDto.notification_content ?? noti.notification_content;
             noti.redirect_url = managementDto.redirect_url ?? noti.redirect_url;
@@ -91,6 +105,16 @@ namespace API.Controllers
             }
 
             noti.last_updated_at = DateTime.Now;
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateNotificationObj(noti);
+            _context.TrackingNotification.Add(
+                new TrackingNotification{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    notification_id = noti.notification_id,
+                    user_id = logged_user.user_id
+                }
+            );
 
             // #save the changes
             var result = await _context.SaveChangesAsync() > 0;

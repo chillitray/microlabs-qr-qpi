@@ -49,30 +49,33 @@ namespace API.Controllers
         [HttpPost("delete/{plant_id}")]
         public async Task<IActionResult> DeletePlant(Guid plant_id){
             //  this api deactivates/activates the entire plant
+            var logged_user =await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
-            return HandleResult(await Mediator.Send(new Delete.Command{PlantId = plant_id}));
+            return HandleResult(await Mediator.Send(new Delete.Command{PlantId = plant_id,logged_user = logged_user}));
         }
 
         [HttpPost("unlink/{id}/{plant_id}")]
         public async Task<IActionResult> UnlinkProduct(Guid id, Guid plant_id){
             //  this api unlinks / links the product-plant mapping 
             // {id} is the product_id
-            
-            return HandleResult(await Mediator.Send(new UnlinkProduct.Command{ProductId=id,PlantId=plant_id}));
+            var logged_user =await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            return HandleResult(await Mediator.Send(new UnlinkProduct.Command{ProductId=id,PlantId=plant_id,logged_user = logged_user}));
         }
 
         [HttpPost("edit")]
         public async Task<IActionResult> EditPlant(Plant plant){
             //  this api edit the plant details
+            var logged_user =await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
-            return HandleResult(await Mediator.Send(new EditPlant.Command{plant = plant}));
+            return HandleResult(await Mediator.Send(new EditPlant.Command{plant = plant,logged_user = logged_user}));
         }
 
         [HttpPost("link/{product_id}/{plant_id}")]
         public async Task<IActionResult> LinkProduct(Guid product_id, Guid plant_id ){
             //  this api creates the link between product and plant
+            var logged_user =await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
-            return HandleResult(await Mediator.Send(new LinkProduct.Command{ProductId=product_id,PlantId=plant_id}));
+            return HandleResult(await Mediator.Send(new LinkProduct.Command{ProductId=product_id,PlantId=plant_id,logged_user = logged_user}));
         }
 
         [HttpGet("details/{plant_id}")]

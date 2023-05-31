@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Trackers;
 using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,8 @@ namespace API.Controllers
             if(QrKey==null){
                 return NotFound("Invalid qr_id");
             }
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateQrManagementObj(QrKey);
 
             var type_dict = new Dictionary<string, QrManagementStatus>(){
                 {"PRINTED", QrManagementStatus.PRINTED},
@@ -47,6 +50,19 @@ namespace API.Controllers
             QrKey.status = type_dict[managementDto.status];
             QrKey.updated_by = logged_user.user_id;
             QrKey.last_updated_at = DateTime.Now;
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateQrManagementObj(QrKey);
+
+            //add record in tracker
+            _context.TrackingQrManagement.Add(
+                new TrackingQrManagement{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    qr_id = QrKey.qr_id,
+                    user_id = logged_user.user_id
+                }
+            );
 
             //save the changes
             var result = await _context.SaveChangesAsync() > 0;
