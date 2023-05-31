@@ -9,6 +9,7 @@ using Persistence;
 using API.Middleware;
 using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace API.Controllers
 {
@@ -403,19 +404,50 @@ namespace API.Controllers
         [HttpPost("test/")]
         public async Task<ActionResult<List<String>>> TestApi()
         {
-            await _context.User.Where(x=>true).ToListAsync();
+            // var users = await _context.User.Where(x=>true).ToListAsync();
+            // var user = users[0].ToString();
+            var notification = await _context.NotificationActivity.FirstAsync();
+            Dictionary<String,String>dict = new Dictionary<string, string>();
+            dict["user"]="hello";
+            dict["hi"]="hello2";
+
             var utils = new Utils();
+
+            var stringvers = utils.DictionaryToString(dict);
+            Console.WriteLine(stringvers.GetType());
+
+            var result = stringvers.Split(',').ToDictionary(e=>e.Split(':')[0], e=>e.Split(':')[1]);
+            // var utils = new Utils();
+            Console.WriteLine(result.GetType());
             List<String> numbers = new List<String>();
 
-            var num ="0000000000";
-            while(true){
-                num = utils.GenerateNextString(num);
-                numbers.Add(num);
-                if(numbers.Count() >= 100){
-                    break;
-                }
-            }
-            
+            // var num ="0000000000";
+            // while(true){
+            //     num = utils.GenerateNextString(num);
+            //     numbers.Add(num);
+            //     if(numbers.Count() >= 100){
+            //         break;
+            //     }
+            // }
+            // _context.NotificationActivity.Add(
+            //     new NotificationActivity{
+            //         notification_id = new Guid("ead6b428-5668-4a69-add7-08db5b9e5fe0"),
+            //         user_id = new Guid("beedde76-8dc8-4889-a65a-cb6c6f785e9f")                    
+            //     }
+            // );
+            // _context.NotificationActivity.Add(
+            //     new NotificationActivity{
+            //         notification_id = new Guid("ead6b428-5668-4a69-add7-08db5b9e5fe0"),
+            //         user_id = new Guid("beedde76-8dc8-4889-a65a-cb6c6f785e9f")                    
+            //     }
+            // );
+            // _context.NotificationActivity.Add(
+            //     new NotificationActivity{
+            //         notification_id = new Guid("ead6b428-5668-4a69-add7-08db5b9e5fe0"),
+            //         user_id = new Guid("1093e3a1-8170-4004-9385-1994f6715536")                    
+            //     }
+            // );
+            // _context.SaveChanges();
 
             return Ok(numbers);
         }

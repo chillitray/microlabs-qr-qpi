@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Trackers;
 using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Persistence;
 
 namespace API.Controllers
@@ -54,27 +54,15 @@ namespace API.Controllers
                 }
             );
 
-            // var new_obj = new PlantKeyManagement{
-            //     plant_key_id = newRecord.Entity.plant_key_id,
-            //     plant_id = newRecord.Entity.plant_id,
-            //     plant_key = newRecord.Entity.plant_key,
-            //     status = newRecord.Entity.status,
-            //     created_by=newRecord.Entity.created_by,
-            //     created_at=newRecord.Entity.created_at,
-            //     last_updated_at=newRecord.Entity.last_updated_at
-            // }.ToString();
-
-            // Console.WriteLine(new_obj);
-            // // var obj = JsonSerializer.Serialize(newRecord.CurrentValues);
-
-            // //create a tracker record
-            // _context.TrackingPlantKeyManagement.Add(
-            //     new TrackingPlantKeyManagement{
-            //         new_obj = new_obj,
-            //         plant_key_id = newRecord.Entity.plant_key_id,
-            //         user_id = logged_user.user_id
-            //     }
-            // );
+            var new_obj_string = new TrackerUtils().CreatePlantKeyObj(newRecord.Entity);
+            //create a tracker record
+            _context.TrackingPlantKeyManagement.Add(
+                new TrackingPlantKeyManagement{
+                    new_obj = new_obj_string,
+                    plant_key_id = newRecord.Entity.plant_key_id,
+                    user_id = logged_user.user_id
+                }
+            );
             
 
             //save the changes
@@ -98,6 +86,8 @@ namespace API.Controllers
             if(plantKey.Count < 1){
                 return NotFound("Invalid plant_key_id");
             }
+            var old_obj_string = new TrackerUtils().CreatePlantKeyObj(plantKey[0]);
+
             plantKey[0].plant_key = managementDto.plant_key ?? plantKey[0].plant_key;
 
             if(managementDto.status != null){
@@ -105,6 +95,17 @@ namespace API.Controllers
                 plantKey[0].status = status;
             }
             plantKey[0].last_updated_at = DateTime.Now;           
+
+            var new_obj_string = new TrackerUtils().CreatePlantKeyObj(plantKey[0]);
+            //create a tracker record
+            _context.TrackingPlantKeyManagement.Add(
+                new TrackingPlantKeyManagement{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    plant_key_id = plantKey[0].plant_key_id,
+                    user_id = logged_user.user_id
+                }
+            );
 
             //save the changes
             var result = await _context.SaveChangesAsync() > 0;

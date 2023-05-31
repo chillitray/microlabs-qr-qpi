@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Trackers;
 using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -49,13 +50,24 @@ namespace API.Controllers
             }
             
             // create a record in db
-            _context.SmtpConfig.Add(new SmtpConfig{
+            var newRecord = _context.SmtpConfig.Add(new SmtpConfig{
                 max_emails_per_day = smtp.max_emails_per_day,
                 email_id = smtp.email_id,
                 password = smtp.password,
                 email_type = email_type,
                 created_by = logged_user.user_id
             });
+
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateSmtpObj(newRecord.Entity);
+            _context.TrackingEditSmtpConfig.Add(
+                new TrackingEditSmtpConfig{
+                    new_obj = new_obj_string,
+                    smtp_config_id = newRecord.Entity.smtp_config_id,
+                    user_id = logged_user.user_id
+                }
+            );
 
             //save the changes
             var result = await _context.SaveChangesAsync() > 0;
@@ -94,15 +106,35 @@ namespace API.Controllers
         [HttpPost("delete/{id}")]
         public async Task<IActionResult> DeleteSmtpRecord(Guid id)
         {
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
             var email =await _context.SmtpConfig.FindAsync(id);
             if(email==null){
                 return NotFound("Invalid smtp_config_id");
             }
 
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateSmtpObj(email);
+
             if(email.status == PlantStatusOptions.ACTIVE){
                 email.status = PlantStatusOptions.INACTIVE;
             }
             email.last_updated_at = DateTime.Now;
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateSmtpObj(email);
+
+            //add record in tracker
+            _context.TrackingEditSmtpConfig.Add(
+                new TrackingEditSmtpConfig{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    smtp_config_id = email.smtp_config_id,
+                    user_id = logged_user.user_id
+                }
+            );
+
+
             var result = await _context.SaveChangesAsync()>0;
             if(!result){
                 return NotFound("Not Deleted");
@@ -112,13 +144,20 @@ namespace API.Controllers
 
         }
 
+
+
+
         [HttpPost("edit/{id}")]
         public async Task<IActionResult> EditSmtpRecord(Guid id,SmtpDto smtp)
         {
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
             var email =await _context.SmtpConfig.FindAsync(id);
             if(email==null){
                 return NotFound("Invalid smtp_config_id");
             }
+
+            //format the data to string
+            var old_obj_string = new TrackerUtils().CreateSmtpObj(email);
 
             var email_type = smtp.email_type ?? email.email_type.ToString();
             var email_type_dict = new Dictionary<string, EmailTypeOptions>(){
@@ -135,6 +174,20 @@ namespace API.Controllers
             }            
             email.email_type = type;
             email.last_updated_at = DateTime.Now;
+
+            //format the data to string
+            var new_obj_string = new TrackerUtils().CreateSmtpObj(email);
+
+            //add record in tracker
+            _context.TrackingEditSmtpConfig.Add(
+                new TrackingEditSmtpConfig{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    smtp_config_id = email.smtp_config_id,
+                    user_id = logged_user.user_id
+                }
+            );
+
             var result = await _context.SaveChangesAsync()>0;
             if(!result){
                 return NotFound("Not Deleted");
