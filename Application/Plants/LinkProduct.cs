@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Trackers;
 using Domain;
 using MediatR;
 using Persistence;
@@ -12,6 +13,7 @@ namespace Application.Plants
             public Guid PlantId { get; set; }
 
             public Guid ProductId { get; set; }
+            public User logged_user {get; set;}
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -24,6 +26,8 @@ namespace Application.Plants
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var logged_user = request.logged_user;
+                
                 //verify whether the plant is in active state or not
                 var plant =await _context.Plant.FindAsync(request.PlantId);
                 if(plant==null){
@@ -51,13 +55,22 @@ namespace Application.Plants
                 if(activity.Count>0) return Result<Unit>.Failure("Already Mapped");
                 
                 //  create the record in ProductPlantmapping
-                _context.ProductPlantMapping.Add( new ProductPlantMapping{
+                var new_mapping_record = _context.ProductPlantMapping.Add( new ProductPlantMapping{
                     product_id = request.ProductId,
                     plant_id = request.PlantId,
                     //  TODO : Change the below static value to dynamic after Auth integration
                     created_by = new Guid("930e0d95-7a3f-4bb5-abc3-08db5165c970")
                 });
                 
+                //format the data to string
+                var new_obj_string2 = new TrackerUtils().CreateProductPlantmappingObj(new_mapping_record.Entity);
+                _context.TrackingProductPlantMapActivity.Add(
+                    new TrackingProductPlantMapActivity{
+                        new_obj = new_obj_string2,
+                        product_plant_mapping_id = new_mapping_record.Entity.product_plant_mapping_id,
+                        user_id = logged_user.user_id
+                    }
+                );
                 
                 // Console.WriteLine("Hello");
 

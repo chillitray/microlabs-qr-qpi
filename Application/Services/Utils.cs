@@ -31,5 +31,13 @@ namespace Application.Services
             var shuffled = chars.OrderBy(c => rand.NextDouble()).ToArray();
             return new string(shuffled);
         }
+
+        public string DictionaryToString(Dictionary < string, string > dictionary) {  
+            string dictionaryString = "{";  
+            foreach(KeyValuePair < string, string > keyValues in dictionary) {  
+            dictionaryString += keyValues.Key + " : " + keyValues.Value + ", ";  
+            }  
+            return dictionaryString.TrimEnd(',', ' ') + "}";  
+        } 
     }
 }

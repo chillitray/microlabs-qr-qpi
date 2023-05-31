@@ -1,4 +1,6 @@
 using Application.Core;
+using Application.Trackers;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -10,6 +12,7 @@ namespace Application.Plants
         public class Command : IRequest<Result<Unit>>
         {
             public Guid PlantId { get; set; }
+            public User logged_user {get; set;}
         }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -22,6 +25,7 @@ namespace Application.Plants
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
+                var logged_user = request.logged_user;
                 // fetch the db object
                 // var activity = _context.ProductPlantMapping.Where(x => x.plant_id==request.PlantId & x.product_id == request.ProductId).ToList();
                 
@@ -41,6 +45,9 @@ namespace Application.Plants
                     return Result<Unit>.Failure("Invalid Plant");
                 }
 
+                //format the data to string
+                var old_obj_string = new TrackerUtils().CreatePlantActivityObj(plant[0]);
+
                 if(plant[0].status==Domain.PlantStatusOptions.ACTIVE){
                     // deactivate the plant
                     plant[0].status=Domain.PlantStatusOptions.INACTIVE;
@@ -51,6 +58,16 @@ namespace Application.Plants
                 
                 plant[0].last_updated_at = DateTime.Now;
                 
+                //format the data to string
+                var new_obj_string = new TrackerUtils().CreatePlantActivityObj(plant[0]);
+                _context.TrackingPlantActivity.Add(
+                    new TrackingPlantActivity{
+                        old_obj = old_obj_string,
+                        new_obj = new_obj_string,
+                        plant_id = plant[0].plant_id,
+                        user_id = logged_user.user_id
+                    }
+                );
                 
                 // Console.WriteLine("Hello");
                 // save the changes to the db

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Application.DTOs;
+using Application.Trackers;
 
 namespace Application.Plants
 {
@@ -96,6 +97,17 @@ namespace Application.Plants
                     founded_on = request.plant.founded_on
                 });
 
+                //format the data to string
+                var new_obj_string = new TrackerUtils().CreatePlantActivityObj(new_plant_record.Entity);
+                _context.TrackingPlantActivity.Add(
+                    new TrackingPlantActivity{
+                        new_obj = new_obj_string,
+                        plant_id = new_plant_record.Entity.plant_id,
+                        user_id = logged_user.user_id
+                    }
+                );
+
+
                 var result = await _context.SaveChangesAsync()>0;
                 if(!result) return Result<Unit>.Failure("Failed to create Activity");
 
@@ -111,7 +123,7 @@ namespace Application.Plants
                 }
 
                 //  create the record in ProductPlantmapping
-                _context.ProductPlantMapping.Add( new ProductPlantMapping{
+                var new_mapping_record = _context.ProductPlantMapping.Add( new ProductPlantMapping{
                     product_id = request.product_id,
                     plant_id = new_plant_id,
                     // max_qr_limit = request.plant.plant_qr_limit,
@@ -121,6 +133,15 @@ namespace Application.Plants
                     last_updated_at = DateTime.Now
                 });
 
+                //format the data to string
+                var new_obj_string2 = new TrackerUtils().CreateProductPlantmappingObj(new_mapping_record.Entity);
+                _context.TrackingProductPlantMapActivity.Add(
+                    new TrackingProductPlantMapActivity{
+                        new_obj = new_obj_string,
+                        product_plant_mapping_id = new_mapping_record.Entity.product_plant_mapping_id,
+                        user_id = logged_user.user_id
+                    }
+                );
                 
                 var result2 = await _context.SaveChangesAsync()>0;
                 if(!result2){
