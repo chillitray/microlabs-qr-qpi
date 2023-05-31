@@ -414,11 +414,11 @@ namespace API.Controllers
             var utils = new Utils();
 
             var stringvers = utils.DictionaryToString(dict);
-            Console.WriteLine(stringvers.GetType());
+            // Console.WriteLine(stringvers.GetType());
 
             var result = stringvers.Split(',').ToDictionary(e=>e.Split(':')[0], e=>e.Split(':')[1]);
             // var utils = new Utils();
-            Console.WriteLine(result.GetType());
+            // Console.WriteLine(result.GetType());
             List<String> numbers = new List<String>();
 
             // var num ="0000000000";
