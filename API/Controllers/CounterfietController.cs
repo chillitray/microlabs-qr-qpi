@@ -186,7 +186,7 @@ namespace API.Controllers
         [HttpPost("get/all/")]
         public async Task<PagedResult<List<CounterfietDto>>> FetchAllRecords([FromQuery]PagingParams param)
         {
-            Console.WriteLine("Hello");
+            // Console.WriteLine("Hello");
             var skip = (param.pageNumber - 1) * param.PageSize ;
 
             var email_x =await _context.CounterfietManagement.Where(x => true).ToListAsync();
