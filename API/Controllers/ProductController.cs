@@ -59,6 +59,16 @@ namespace API.Controllers
                 }
             );
 
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Added new product",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
+
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to create the record");
@@ -102,6 +112,16 @@ namespace API.Controllers
                     old_obj = old_obj_string,
                     new_obj = new_obj_string,
                     product_id = product.product_id,
+                    user_id = logged_user.user_id
+                }
+            );
+
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Edited product",
+                    severity_type = SeverityType.CRITICAL,
                     user_id = logged_user.user_id
                 }
             );
@@ -175,6 +195,16 @@ namespace API.Controllers
                     old_obj = old_obj_string,
                     new_obj = new_obj_string,
                     product_id = product.product_id,
+                    user_id = logged_user.user_id
+                }
+            );
+
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Disabled product",
+                    severity_type = SeverityType.CRITICAL,
                     user_id = logged_user.user_id
                 }
             );

@@ -59,12 +59,24 @@ namespace API.Controllers
             });
 
 
+
             //format the data to string
             var new_obj_string = new TrackerUtils().CreateSmtpObj(newRecord.Entity);
             _context.TrackingEditSmtpConfig.Add(
                 new TrackingEditSmtpConfig{
                     new_obj = new_obj_string,
                     smtp_config_id = newRecord.Entity.smtp_config_id,
+                    user_id = logged_user.user_id
+                }
+            );
+
+
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Added SMTP record",
+                    severity_type = SeverityType.CRITICAL,
                     user_id = logged_user.user_id
                 }
             );
@@ -134,6 +146,16 @@ namespace API.Controllers
                 }
             );
 
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Removed SMTP record",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
+
 
             var result = await _context.SaveChangesAsync()>0;
             if(!result){
@@ -187,6 +209,17 @@ namespace API.Controllers
                     user_id = logged_user.user_id
                 }
             );
+
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = new_obj_string,
+                    message = "Edited SMTP record",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
+
 
             var result = await _context.SaveChangesAsync()>0;
             if(!result){

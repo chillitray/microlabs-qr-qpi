@@ -69,6 +69,16 @@ namespace Application.Plants
                     }
                 );
                 
+                // create a record in TrackerActivity
+                var activity = _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj = new_obj_string,
+                        message = "Disabled Plant",
+                        severity_type = SeverityType.CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+                );
+
                 // Console.WriteLine("Hello");
                 // save the changes to the db
                 var result = await _context.SaveChangesAsync() > 0;

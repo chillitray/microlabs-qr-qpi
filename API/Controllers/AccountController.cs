@@ -202,6 +202,15 @@ namespace API.Controllers
                 otp_db[0].status = TrackerOtpStatus.VERIFIED;
                 user.status = USerStatusOptions.ACTIVE;
 
+                _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj="",
+                        message = "LogIn",
+                        severity_type = SeverityType.NON_CRITICAL,
+                        user_id = user.user_id
+                    }
+            );
+
                 var result2 = await _context.SaveChangesAsync() > 0;
                 if (!result2)
                 {
@@ -253,6 +262,17 @@ namespace API.Controllers
                 );
 
             }
+
+            _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj="",
+                        message = "Logout",
+                        severity_type = SeverityType.NON_CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+            );
+
+
             var result2 = await _context.SaveChangesAsync() > 0;
             if (!result2)
             {
@@ -396,6 +416,15 @@ namespace API.Controllers
                 return NotFound("Failed to Change password");
             }
 
+            _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        message = "Changed Password",
+                        severity_type = SeverityType.NON_CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+            );
+
+            _context.SaveChanges();
             return Ok();
 
         }

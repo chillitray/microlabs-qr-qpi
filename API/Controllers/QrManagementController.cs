@@ -34,12 +34,32 @@ namespace API.Controllers
             var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             // verify whether the plant had a key already
-            var QrKey = _context.QrManagement.Find(managementDto.qr_id);
-            if(QrKey==null){
+            var QrKeys = _context.QrManagement.Where(x=>x.qr_id == managementDto.qr_id).ToList();
+            if(QrKeys.Count<1){
                 return NotFound("Invalid qr_id");
             }
+            var QrKey = QrKeys[0];
             //format the data to string
-            var old_obj_string = new TrackerUtils().CreateQrManagementObj(QrKey);
+            Console.WriteLine(QrKey.qr_id);
+            var tracker = new TrackerUtils();
+            var old_obj_db = new AddQrTrackerDto{
+                qr_id = QrKey.qr_id,
+                // product_id = QrKey.product_id,
+                // plant_id = QrKey.plant_id,
+                // public_id = QrKey.public_id,
+                // manufactured_date = QrKey.manufactured_date,
+                // expiry_date = QrKey.expiry_date,
+                // product_mrp_copy = QrKey.product_mrp_copy,
+                // pack_id =QrKey.pack_id,
+                // serial_number =QrKey.serial_number,
+                // batch_no =QrKey.batch_no,
+                status =QrKey.status.ToString(),
+                // created_at_ip = QrKey.created_at_ip,
+                // updated_by =QrKey.updated_by ?? new Guid(),
+                // created_at=QrKey.created_at,
+                // last_updated_at=QrKey.last_updated_at
+            };
+            var old_obj_string = tracker.CreateQrManagementObj(old_obj_db);
 
             var type_dict = new Dictionary<string, QrManagementStatus>(){
                 {"PRINTED", QrManagementStatus.PRINTED},
@@ -52,7 +72,24 @@ namespace API.Controllers
             QrKey.last_updated_at = DateTime.Now;
 
             //format the data to string
-            var new_obj_string = new TrackerUtils().CreateQrManagementObj(QrKey);
+            var new_obj_db = new AddQrTrackerDto{
+                qr_id = QrKey.qr_id,
+                // product_id = QrKey.product_id,
+                // plant_id = QrKey.plant_id,
+                // public_id = QrKey.public_id,
+                // manufactured_date = QrKey.manufactured_date,
+                // expiry_date = QrKey.expiry_date,
+                // product_mrp_copy = QrKey.product_mrp_copy,
+                // pack_id =QrKey.pack_id,
+                // serial_number =QrKey.serial_number,
+                // batch_no =QrKey.batch_no,
+                status =QrKey.status.ToString(),
+                // created_at_ip = QrKey.created_at_ip,
+                // updated_by =QrKey.updated_by ?? new Guid(),
+                // created_at=QrKey.created_at,
+                // last_updated_at=QrKey.last_updated_at
+            };
+            var new_obj_string = new TrackerUtils().CreateQrManagementObj(new_obj_db);
 
             //add record in tracker
             _context.TrackingQrManagement.Add(

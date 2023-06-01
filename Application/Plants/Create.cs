@@ -142,6 +142,15 @@ namespace Application.Plants
                         user_id = logged_user.user_id
                     }
                 );
+
+                _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj = new_obj_string,
+                        message = "Added new plant",
+                        severity_type = SeverityType.CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+                );
                 
                 var result2 = await _context.SaveChangesAsync()>0;
                 if(!result2){

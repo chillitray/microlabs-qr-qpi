@@ -1,4 +1,5 @@
 using System.Reflection;
+using API.DTOs;
 using API.Services;
 using Domain;
 
@@ -9,15 +10,47 @@ namespace API.Trackers
 
         public String ConvertToString<T>(T new_obj){
             //convert the record into dictionary
+            // Console.WriteLine(new_obj);
             var new_obj2 = new_obj.GetType()
                 .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                     .ToDictionary(prop => prop.Name, prop =>prop.GetValue(new_obj, null).ToString());
 
+            // Console.WriteLine("Hello2");
             var utils = new Utils();
             // convert into string
             var new_obj_string = utils.DictionaryToString(new_obj2);
 
             return new_obj_string;
+
+        }
+
+        public Dictionary<String,Dictionary<String,String>> FindChanges(String old_obj , String new_obj){
+            //convert the string into dictionary
+            var old_obj_dict = old_obj.Remove(0,1).Remove(old_obj.Length-2).Split(',').ToDictionary(e=>e.Split(':')[0].Trim(), e=>e.Split(':')[1].Trim());
+            var new_obj_dict = new_obj.Remove(0,1).Remove(new_obj.Length-2).Split(',').ToDictionary(e=>e.Split(':')[0].Trim(), e=>e.Split(':')[1].Trim());
+
+            //compare the two strings and return the changes
+            // var dict3 = dict2.Where(entry => dict1[entry.Key] != entry.Value)
+            //      .ToDictionary(entry => entry.Key, entry => entry.Value);
+
+            //find the keys that have different values
+            var keysWithDifferentValues = new List<string>();
+            foreach (var kvp in old_obj_dict)
+            {
+                if(kvp.Key == "last_updated_at" | kvp.Key == "created_by" | kvp.Key == "created_at") continue;
+                
+                if(!kvp.Value.Equals(new_obj_dict[kvp.Key]))
+                    keysWithDifferentValues.Add(kvp.Key);
+            }
+
+            Dictionary<String,Dictionary<String,String>> final_dict = new Dictionary<string, Dictionary<String,String>>();
+            foreach(String key in keysWithDifferentValues){
+                final_dict[key] = new Dictionary<String,String>{
+                    {"old_value",old_obj_dict[key]},
+                    {"new_value",new_obj_dict[key]}
+                };
+            }
+            return final_dict;
 
         }
 
@@ -150,23 +183,23 @@ namespace API.Trackers
             return this.ConvertToString(new_obj);
         }
 
-        public String CreateQrManagementObj(QrManagement record){
-            var new_obj = new QrManagement{
+        public String CreateQrManagementObj(AddQrTrackerDto record){
+            var new_obj = new AddQrTrackerDto{
                 qr_id = record.qr_id,
-                product_id = record.product_id,
-                plant_id = record.plant_id,
-                public_id = record.public_id,
-                manufactured_date = record.manufactured_date,
-                expiry_date = record.expiry_date,
-                product_mrp_copy = record.product_mrp_copy,
-                pack_id = record.pack_id,
-                serial_number = record.serial_number,
-                batch_no = record.batch_no,
+                // product_id = record.product_id,
+                // plant_id = record.plant_id,
+                // public_id = record.public_id,
+                // manufactured_date = record.manufactured_date,
+                // expiry_date = record.expiry_date,
+                // product_mrp_copy = record.product_mrp_copy,
+                // pack_id = record.pack_id,
+                // serial_number = record.serial_number,
+                // batch_no = record.batch_no,
                 status = record.status,
-                created_at_ip = record.created_at_ip,
-                updated_by = record.updated_by,
-                created_at = record.created_at,
-                last_updated_at = record.last_updated_at
+                // created_at_ip = record.created_at_ip,
+                // updated_by = record.updated_by,
+                // created_at = record.created_at,
+                // last_updated_at = record.last_updated_at
             };
             return this.ConvertToString(new_obj);
         }
@@ -185,8 +218,8 @@ namespace API.Trackers
             return this.ConvertToString(new_obj);
         }
 
-        public String CreateUserbj(User record){
-            var new_obj = new User{
+        public String CreateUserbj(AddUserTrackerDto record){
+            var new_obj = new AddUserTrackerDto{
                 user_id = record.user_id,
                 Email = record.Email,
                 emp_id = record.emp_id,

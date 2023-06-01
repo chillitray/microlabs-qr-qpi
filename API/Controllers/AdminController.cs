@@ -83,41 +83,55 @@ namespace API.Controllers
                 if (plant.status != PlantStatusOptions.ACTIVE) return NotFound("plant is in inactive state");
             }
 
-            var new_users = new List<User>{ 
+            var new_users = new List<User>{
                 new User
                     {
-                        Email = details.Email,                        
+                        Email = details.Email,
                         emp_id = details.emp_id,
                         full_name = details.full_name,
                         role_id = details.role_id,
                         plant_id = details.plant_id,
                         UserName = username,
-                        created_by = logged_user.user_id                        
+                        created_by = logged_user.user_id
                     }
                 };
 
-            foreach(User user_record in new_users){
-                    // Console.WriteLine("Hello234");
-                    var result =await _userManager.CreateAsync(user_record, password);
-                    // Console.WriteLine("Hello234");
-                    // Console.WriteLine(result);
-                    if (!result.Succeeded) return NotFound("unable to add user. please try again");
+            foreach (User user_record in new_users)
+            {
+                // Console.WriteLine("Hello234");
+                var result = await _userManager.CreateAsync(user_record, password);
+                // Console.WriteLine("Hello234");
+                // Console.WriteLine(result);
+                if (!result.Succeeded) return NotFound("unable to add user. please try again");
             }
-            
-            // var new_user_db = _context.User.Where(x => x.Email == details.Email).ToList().First();
+
+            var new_user_db = new AddUserTrackerDto
+            {
+                user_id = new_users[0].user_id,
+                Email = details.Email,
+                emp_id = details.emp_id,
+                full_name = details.full_name,
+                role_id = details.role_id,
+                plant_id = details.plant_id,
+                created_by = logged_user.user_id,
+                joined_date = new_users[0].joined_date,
+                last_updated_at= new_users[0].last_updated_at,
+                status = new_users[0].status.ToString(),
+                created_at = new_users[0].created_at
+            };
             // //format the data to string
-            // var new_obj_string = new TrackerUtils().CreateUserbj(new_user_db);
-            // _context.TrackingUserEditActivity.Add(
-            //     new TrackingUserEditActivity{
-            //         new_obj = new_obj_string,
-            //         user_id = new_users[0].user_id,
-            //         edited_by = logged_user.user_id
-            //     }
-            // );
+            var new_obj_string = new TrackerUtils().CreateUserbj(new_user_db);
+            _context.TrackingUserEditActivity.Add(
+                new TrackingUserEditActivity{
+                    new_obj = new_obj_string,
+                    user_id = new_users[0].user_id,
+                    edited_by = logged_user.user_id
+                }
+            );
 
             //send a mail to the user
             var emailSubject = "MicroLabs";
-            var emailBody = "You are added to the Microlabs portal. To SignIn use the following credentials email: "+ details.Email +" and password: "+password;
+            var emailBody = "You are added to the Microlabs portal. To SignIn use the following credentials email: " + details.Email + " and password: " + password;
 
             var emailData = new EmailData
             {
@@ -154,6 +168,20 @@ namespace API.Controllers
             {
                 return NotFound("User created but Unable to send Email");
             }
+
+            var message = "Added new Plant Manager";
+            if(role.access_level == AccessLevelOptions.ADMIN){
+                message = "Added new Admin";
+            }
+            _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj = new_obj_string,
+                        message = message,
+                        severity_type = SeverityType.SEMI_CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+                );
+
             _context.SaveChanges();
 
             return Ok("User added to the portal");
@@ -168,32 +196,91 @@ namespace API.Controllers
 
             //fetch the use details from the db
             var users = _context.User.Where(x => x.user_id == details.user_id).ToList();
-            if(users.Count <1){
+            if (users.Count < 1)
+            {
                 return NotFound("Invalid user_id");
             }
             var user = users[0];
-            // //format the data to string
-            // var old_obj_string = new TrackerUtils().CreateUserbj(user);
+            if(details.role_id!=null){
+                //verify the role_id
+                var role = _context.Role.Find(details.role_id);
+                if (role == null) return NotFound("invalid role_id");
+                if (role.status == StatusOptions.INACTIVE) return NotFound("role is in inactive state");
+            }
+            if(details.plant_id!=null){
+                //verify the role_id
+                var role = _context.Plant.Find(details.plant_id);
+                if (role == null) return NotFound("invalid plant_id");
+                if (role.status == PlantStatusOptions.INACTIVE) return NotFound("Plant is in inactive state");
+            }
 
-            user.plant_id= details.plant_id ?? user.plant_id;
+
+            // //format the data to string
+            var old_user_db = new AddUserTrackerDto
+            {
+                user_id = user.user_id,
+                Email = user.Email,
+                emp_id = user.emp_id,
+                full_name = user.full_name,
+                role_id =user.role_id,
+                plant_id = user.plant_id,
+                created_by = user.created_by,
+                joined_date = user.joined_date,
+                last_updated_at= user.last_updated_at,
+                status = user.status.ToString(),
+                created_at = user.created_at
+            };
+            var old_obj_string = new TrackerUtils().CreateUserbj(old_user_db);
+
+            user.plant_id = details.plant_id ?? user.plant_id;
             user.full_name = details.full_name ?? user.full_name;
             user.role_id = details.role_id ?? user.role_id;
             user.last_updated_at = DateTime.Now;
+            
+            // TODO : need to take care of product logo
 
             // //format the data to string
-            // var new_obj_string = new TrackerUtils().CreateUserbj(user);
-            // _context.TrackingUserEditActivity.Add(
-            //     new TrackingUserEditActivity{
-            //         old_obj = old_obj_string,
-            //         new_obj = new_obj_string,
-            //         user_id = user.user_id,
-            //         edited_by = logged_user.user_id
-            //     }
-            // );
+            var new_user_db = new AddUserTrackerDto
+            {
+                user_id = user.user_id,
+                Email = user.Email,
+                emp_id = user.emp_id,
+                full_name = user.full_name,
+                role_id =user.role_id,
+                plant_id = user.plant_id,
+                created_by = user.created_by,
+                joined_date = user.joined_date,
+                last_updated_at= user.last_updated_at,
+                status = user.status.ToString(),
+                created_at = user.created_at
+            };
+            var new_obj_string = new TrackerUtils().CreateUserbj(new_user_db);
+            _context.TrackingUserEditActivity.Add(
+                new TrackingUserEditActivity{
+                    old_obj = old_obj_string,
+                    new_obj = new_obj_string,
+                    user_id = user.user_id,
+                    edited_by = logged_user.user_id
+                }
+            );
 
+            var role_db = _context.Role.Find(user.role_id);
+            var message = "Edited Plant manager details";
+            if(role_db.access_level == AccessLevelOptions.ADMIN){
+                message = "Edited Admin details";
+            }
 
-            var result =await _context.SaveChangesAsync() >0;
-            if(!result) return NotFound("Unable to edit the details");
+            _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj = new_obj_string,
+                        message = message,
+                        severity_type = SeverityType.SEMI_CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+            );
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (!result) return NotFound("Unable to edit the details");
 
             return Ok("User details edited successfully");
         }
@@ -207,12 +294,27 @@ namespace API.Controllers
 
             //fetch the use details from the db
             var users = _context.User.Where(x => x.user_id == details.user_id).ToList();
-            if(users.Count < 1){
+            if (users.Count < 1)
+            {
                 return NotFound("Invalid user_id");
             }
             var user = users[0];
             //format the data to string
-            var old_obj_string = new TrackerUtils().CreateUserbj(user);
+            var old_user_db = new AddUserTrackerDto
+            {
+                user_id = user.user_id,
+                Email = user.Email,
+                emp_id = user.emp_id,
+                full_name = user.full_name,
+                role_id =user.role_id,
+                plant_id = user.plant_id,
+                created_by = user.created_by,
+                joined_date = user.joined_date,
+                last_updated_at= user.last_updated_at,
+                status = user.status.ToString(),
+                created_at = user.created_at
+            };
+            var old_obj_string = new TrackerUtils().CreateUserbj(old_user_db);
 
 
             var status_dict = new Dictionary<string, USerStatusOptions>(){
@@ -221,9 +323,23 @@ namespace API.Controllers
             };
             user.status = status_dict[details.status];
             user.last_updated_at = DateTime.Now;
+
             
-            //format the data to string
-            var new_obj_string = new TrackerUtils().CreateUserbj(user);
+            var new_user_db = new AddUserTrackerDto
+            {
+                user_id = user.user_id,
+                Email = user.Email,
+                emp_id = user.emp_id,
+                full_name = user.full_name,
+                role_id =user.role_id,
+                plant_id = user.plant_id,
+                created_by = user.created_by,
+                joined_date = user.joined_date,
+                last_updated_at= user.last_updated_at,
+                status = user.status.ToString(),
+                created_at = user.created_at
+            };
+            var new_obj_string = new TrackerUtils().CreateUserbj(new_user_db);
             _context.TrackingUserEditActivity.Add(
                 new TrackingUserEditActivity{
                     old_obj = old_obj_string,
@@ -233,8 +349,28 @@ namespace API.Controllers
                 }
             );
 
-            var result =await _context.SaveChangesAsync() >0;
-            if(!result) return NotFound("Unable to update the user status");
+            var role_db = _context.Role.Find(user.role_id);
+            var message = "Plant manager ";
+            if(role_db.access_level == AccessLevelOptions.ADMIN){
+                message = "Admin ";
+            }
+            if(details.status == "ACTIVE"){
+                message = "Unblocked "+message;
+            }else{
+                message = "Blocked "+message;
+            }
+            _context.TrackingActivity.Add(
+                    new TrackingActivity{
+                        custom_obj = new_obj_string,
+                        message = message,
+                        severity_type = SeverityType.SEMI_CRITICAL,
+                        user_id = logged_user.user_id
+                    }
+            );
+
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (!result) return NotFound("Unable to update the user status");
 
             return Ok("User status updated successfully");
         }
