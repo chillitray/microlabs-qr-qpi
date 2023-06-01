@@ -57,6 +57,16 @@ namespace API.Controllers
                 }
             );
 
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = "",
+                    message = "Added rate limmit record",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
+
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to create the record");
@@ -69,7 +79,7 @@ namespace API.Controllers
         [HttpPost("edit/")]
         public async Task<ActionResult> Edit(RateLimitDto managementDto)
         {
-            // var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             var rate_limit =await _context.RateLimits.FindAsync(managementDto.rate_limit_id);
             if(rate_limit==null){
@@ -81,7 +91,15 @@ namespace API.Controllers
                 rate_limit.max_allowed_per_day = managementDto.max_allowed_per_day;
             }
             rate_limit.last_updated_at = DateTime.Now;
-
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = "",
+                    message = "Edited rate limmit record",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to edit the record");
@@ -94,7 +112,7 @@ namespace API.Controllers
         [HttpPost("delete/{rate_limit_id}")]
         public async Task<ActionResult> Delete(Guid rate_limit_id)
         {
-            // var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
             var rate_limit =await _context.RateLimits.FindAsync(rate_limit_id);
             if(rate_limit==null){
@@ -107,6 +125,15 @@ namespace API.Controllers
             }
             
             rate_limit.last_updated_at = DateTime.Now;
+            // create a record in TrackerActivity
+            var activity = _context.TrackingActivity.Add(
+                new TrackingActivity{
+                    custom_obj = "",
+                    message = "Removed rate limmit record",
+                    severity_type = SeverityType.CRITICAL,
+                    user_id = logged_user.user_id
+                }
+            );
 
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;

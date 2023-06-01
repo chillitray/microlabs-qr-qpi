@@ -63,7 +63,7 @@ namespace API.Controllers
         }
 
         [HttpPost("edit")]
-        public async Task<IActionResult> EditPlant(Plant plant){
+        public async Task<IActionResult> EditPlant(EditPlantDto plant){
             //  this api edit the plant details
             var logged_user =await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 

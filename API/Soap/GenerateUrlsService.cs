@@ -41,6 +41,17 @@ namespace API.Soap
                 return new List<String>();
             }
             var session = sessions[0];
+            // check the qr_limit of plant
+            var plant = _context.Plant.Find(session.plant_id);
+            if(plant==null){
+                return new List<String>();
+            }
+            // find the number of qrs generated today for this product
+            var qrs_generated = _context.QrManagement.Where(x => x.plant_id == session.plant_id & x.created_at >= DateTime.Today ).ToList().Count; 
+            if(qrs_generated + Quantity > plant.plant_qr_limit){
+                 return new List<String>();
+            }
+            
             // Console.WriteLine("Hello");
             //fetch the last_used_id 
             var last_used = _context.RangeTable.Where(x=>true).ToList().First();
