@@ -40,7 +40,7 @@ namespace API.Controllers
             }
             var QrKey = QrKeys[0];
             //format the data to string
-            Console.WriteLine(QrKey.qr_id);
+            // Console.WriteLine(QrKey.qr_id);
             var tracker = new TrackerUtils();
             var old_obj_db = new AddQrTrackerDto{
                 qr_id = QrKey.qr_id,
