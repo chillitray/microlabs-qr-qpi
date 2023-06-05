@@ -407,12 +407,6 @@ namespace API.Controllers
                 return NotFound("newPassword should be different from oldPasssword");
             }
 
-            //verify the password
-            var result = await _userManager.CheckPasswordAsync(logged_user,change.newPassword);
-            if(!result){
-                return NotFound("invalid new password");
-            }
-
             var password = await _userManager.ChangePasswordAsync(logged_user,change.oldPassword,change.newPassword);
 
             // Console.WriteLine(password);
