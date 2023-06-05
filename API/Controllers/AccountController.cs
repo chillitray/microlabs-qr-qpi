@@ -407,6 +407,12 @@ namespace API.Controllers
                 return NotFound("newPassword should be different from oldPasssword");
             }
 
+            //verify the password
+            var result = await _userManager.CheckPasswordAsync(logged_user,change.newPassword);
+            if(!result){
+                return NotFound("invalid new password");
+            }
+
             var password = await _userManager.ChangePasswordAsync(logged_user,change.oldPassword,change.newPassword);
 
             // Console.WriteLine(password);
@@ -418,6 +424,7 @@ namespace API.Controllers
 
             _context.TrackingActivity.Add(
                     new TrackingActivity{
+                        custom_obj = "{}",
                         message = "Changed Password",
                         severity_type = SeverityType.NON_CRITICAL,
                         user_id = logged_user.user_id
