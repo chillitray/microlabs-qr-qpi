@@ -49,7 +49,7 @@ builder.Services.AddIdentityServices(builder.Configuration);
 // Email Configuration : used MailKit Package
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
-
+builder.Services.AddCors();
 //forgot password token generation config
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromHours(1));
@@ -59,6 +59,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSoapCore();
 builder.Services.TryAddScoped<ISampleService, SampleService>();
 builder.Services.TryAddScoped<IGenerateUrlsService, GenerateUrlsService>();
+
 // builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
@@ -75,6 +76,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+app.UseCors(builder => builder
+     .AllowAnyOrigin()
+     .AllowAnyMethod()
+     .AllowAnyHeader());
 
 // app.UseHttpsRedirection();
 
