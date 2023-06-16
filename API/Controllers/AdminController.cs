@@ -73,15 +73,15 @@ namespace API.Controllers
             if (role == null) return NotFound("invalid role_id");
             if (role.status == StatusOptions.INACTIVE) return NotFound("role is in inactive state");
 
-            var plant = new Plant();
-            if (details.plant_id != null)
-            {
-                //check for plant_id is valid or not
-                plant = _context.Plant.Find(details.plant_id);
-                if (plant == null) return NotFound("invalid plant_id");
-                //check if plant is active or not
-                if (plant.status != PlantStatusOptions.ACTIVE) return NotFound("plant is in inactive state");
-            }
+            // var plant = new Plant();
+            // if (details.plant_id != null)
+            // {
+            //     //check for plant_id is valid or not
+            //     plant = _context.Plant.Find(details.plant_id);
+            //     if (plant == null) return NotFound("invalid plant_id");
+            //     //check if plant is active or not
+            //     if (plant.status != PlantStatusOptions.ACTIVE) return NotFound("plant is in inactive state");
+            // }
 
             var new_users = new List<User>{
                 new User
@@ -90,7 +90,7 @@ namespace API.Controllers
                         emp_id = details.emp_id,
                         full_name = details.full_name,
                         role_id = details.role_id,
-                        plant_id = details.plant_id,
+                        // plant_id = details.plant_id,
                         UserName = username,
                         created_by = logged_user.user_id
                     }
@@ -112,7 +112,7 @@ namespace API.Controllers
                 emp_id = details.emp_id,
                 full_name = details.full_name,
                 role_id = details.role_id,
-                plant_id = details.plant_id,
+                // plant_id = details.plant_id,
                 created_by = logged_user.user_id,
                 joined_date = new_users[0].joined_date,
                 last_updated_at= new_users[0].last_updated_at,
@@ -207,12 +207,12 @@ namespace API.Controllers
                 if (role == null) return NotFound("invalid role_id");
                 if (role.status == StatusOptions.INACTIVE) return NotFound("role is in inactive state");
             }
-            if(details.plant_id!=null){
-                //verify the role_id
-                var role = _context.Plant.Find(details.plant_id);
-                if (role == null) return NotFound("invalid plant_id");
-                if (role.status == PlantStatusOptions.INACTIVE) return NotFound("Plant is in inactive state");
-            }
+            // if(details.plant_id!=null){
+            //     //verify the role_id
+            //     var role = _context.Plant.Find(details.plant_id);
+            //     if (role == null) return NotFound("invalid plant_id");
+            //     if (role.status == PlantStatusOptions.INACTIVE) return NotFound("Plant is in inactive state");
+            // }
 
 
             // //format the data to string
@@ -223,7 +223,7 @@ namespace API.Controllers
                 emp_id = user.emp_id,
                 full_name = user.full_name,
                 role_id =user.role_id,
-                plant_id = user.plant_id,
+                // plant_id = user.plant_id,
                 created_by = user.created_by,
                 joined_date = user.joined_date,
                 last_updated_at= user.last_updated_at,
@@ -232,7 +232,7 @@ namespace API.Controllers
             };
             var old_obj_string = new TrackerUtils().CreateUserbj(old_user_db);
 
-            user.plant_id = details.plant_id ?? user.plant_id;
+            // user.plant_id = details.plant_id ?? user.plant_id;
             user.full_name = details.full_name ?? user.full_name;
             user.role_id = details.role_id ?? user.role_id;
             user.last_updated_at = DateTime.Now;
@@ -247,7 +247,7 @@ namespace API.Controllers
                 emp_id = user.emp_id,
                 full_name = user.full_name,
                 role_id =user.role_id,
-                plant_id = user.plant_id,
+                // plant_id = user.plant_id,
                 created_by = user.created_by,
                 joined_date = user.joined_date,
                 last_updated_at= user.last_updated_at,
@@ -307,7 +307,7 @@ namespace API.Controllers
                 emp_id = user.emp_id,
                 full_name = user.full_name,
                 role_id =user.role_id,
-                plant_id = user.plant_id,
+                // plant_id = user.plant_id,
                 created_by = user.created_by,
                 joined_date = user.joined_date,
                 last_updated_at= user.last_updated_at,
@@ -332,7 +332,7 @@ namespace API.Controllers
                 emp_id = user.emp_id,
                 full_name = user.full_name,
                 role_id =user.role_id,
-                plant_id = user.plant_id,
+                // plant_id = user.plant_id,
                 created_by = user.created_by,
                 joined_date = user.joined_date,
                 last_updated_at= user.last_updated_at,

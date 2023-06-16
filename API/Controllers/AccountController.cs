@@ -56,7 +56,10 @@ namespace API.Controllers
                     // Fetch today's failed login attempts count
                     var count = db_otps_all.Where(x => x.status == TrackerOtpStatus.FAILED & x.created_at >= DateTime.Today).ToList();
                     // check whether the user exceeded todays login failed attempts
-                    var rate_limits = _context.RateLimits.Where(x => x.rate_type == RateTypeOptions.MAX_LOGIN_FAILED_ATTEMPTS).ToList();
+                    var rate_limits = _context.RateLimits.Where(x => x.rate_type == RateTypeOptions.MAX_LOGIN_FAILED_ATTEMPTS & x.status==PlantStatusOptions.ACTIVE).ToList();
+                    if(rate_limits.Count<1){
+                        return NotFound("Rate limit records not found");
+                    }
                     var rate_record = rate_limits[0];
                     if (count.Count >= rate_record.max_allowed_per_day)
                     {

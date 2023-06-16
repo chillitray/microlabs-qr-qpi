@@ -7,7 +7,7 @@ namespace API.DTOs
         public String emp_id { get; set; }
         public String full_name { get; set; }
         public Guid role_id { get; set; }
-        public Guid? plant_id { get; set; }
+        // public Guid? plant_id { get; set; }
         public String Email { get; set; }
         public DateTime joined_date { get; set; }
         public DateTime last_updated_at { get; set; }

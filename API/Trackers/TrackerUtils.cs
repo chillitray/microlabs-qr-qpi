@@ -228,7 +228,7 @@ namespace API.Trackers
                 full_name = record.full_name,
                 role_id = record.role_id,
                 status = record.status,
-                plant_id = record.plant_id,
+                // plant_id = record.plant_id,
                 created_at = record.created_at,
                 created_by = record.created_by
             };
