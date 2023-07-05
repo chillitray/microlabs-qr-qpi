@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "vC+DrP4FzfTH1uZUecw9bDzpbAHkoYueF9/ecuLN8sf0uSV+mFuSZFnkLrb8bFklK99YHhbPfx/PTQTFX6TB9Q==",
+  "dgSpecHash": "YqqLYW0jeYFR9zdeyRqujMAgUoRaVwijtLmsOP3QO0JLC6kgGrs85j9fDFi6tuj2TTQk34OjyQQnLUWStxUB2A==",
   "success": true,
   "projectFilePath": "/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Application/Application.csproj",
   "expectedPackageFiles": [
@@ -87,7 +87,9 @@
     "/home/zintlr/.nuget/packages/system.text.json/7.0.1/system.text.json.7.0.1.nupkg.sha512",
     "/home/zintlr/.nuget/packages/system.threading.tasks/4.3.0/system.threading.tasks.4.3.0.nupkg.sha512",
     "/home/zintlr/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "/home/zintlr/.nuget/packages/system.windows.extensions/5.0.0/system.windows.extensions.5.0.0.nupkg.sha512"
+    "/home/zintlr/.nuget/packages/system.windows.extensions/5.0.0/system.windows.extensions.5.0.0.nupkg.sha512",
+    "/home/zintlr/.nuget/packages/microsoft.netcore.app.ref/7.0.8/microsoft.netcore.app.ref.7.0.8.nupkg.sha512",
+    "/home/zintlr/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.8/microsoft.aspnetcore.app.ref.7.0.8.nupkg.sha512"
   ],
   "logs": []
 }

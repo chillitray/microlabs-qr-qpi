@@ -43,7 +43,7 @@ namespace API.Controllers
             return Ok(PagedResult<List<FetchAdminsDto>>.Success(result.Value, result.PageNumber, result.PageSize, result.TotalRecords));
         }
 
-        [CustomAuthorization(AccessLevelsDto.ADMIN)]
+        [CustomAuthorization(AccessLevelsDto.ROLE)]
         [HttpPost("employee/create/")]
         public async Task<IActionResult> CreateAdmin(AddAdminDto details)
         {

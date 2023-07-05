@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "aQnA7X8OhS+ODoKTUvDeJrS6CsfGFa9P2Ytv54QnSlLfV9hLgbQsIHHQvi/TJ5JLlVd8NXGVueERiFYVmfu0lg==",
+  "dgSpecHash": "F8/qVALtUgjoBnPWgWPOjlGylayzuXTu4d4g1XSHztORyHiw+2cif5m8irZF+zlhe9hAQUJYrqK+xCUJHAXohw==",
   "success": true,
   "projectFilePath": "/home/zintlr/Desktop/Chillitray/microlabs-qr-api/Domain/Domain.csproj",
   "expectedPackageFiles": [
@@ -21,7 +21,9 @@
     "/home/zintlr/.nuget/packages/microsoft.extensions.logging/7.0.0/microsoft.extensions.logging.7.0.0.nupkg.sha512",
     "/home/zintlr/.nuget/packages/microsoft.extensions.logging.abstractions/7.0.0/microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512",
     "/home/zintlr/.nuget/packages/microsoft.extensions.options/7.0.1/microsoft.extensions.options.7.0.1.nupkg.sha512",
-    "/home/zintlr/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512"
+    "/home/zintlr/.nuget/packages/microsoft.extensions.primitives/7.0.0/microsoft.extensions.primitives.7.0.0.nupkg.sha512",
+    "/home/zintlr/.nuget/packages/microsoft.netcore.app.ref/7.0.8/microsoft.netcore.app.ref.7.0.8.nupkg.sha512",
+    "/home/zintlr/.nuget/packages/microsoft.aspnetcore.app.ref/7.0.8/microsoft.aspnetcore.app.ref.7.0.8.nupkg.sha512"
   ],
   "logs": []
 }

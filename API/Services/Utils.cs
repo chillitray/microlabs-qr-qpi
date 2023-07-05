@@ -57,7 +57,7 @@ namespace API.Services
             return Convert.ToByte(current);
         } 
 
-        public string GenerateNextString(string id="0000000000")
+        public string GenerateNextString(string id="000000000000")
         {
             var aSCIIValues = ASCIIEncoding.ASCII.GetBytes(id);
 
@@ -114,7 +114,231 @@ namespace API.Services
                 dictionaryString += keyValues.Key + " : " + keyValues.Value + ", ";  
                 }  
                 return dictionaryString.TrimEnd(',', ' ') + "}";  
-            } 
+            }
+
+
+
+
+        private List<char> RandQrChars = new List<char> {'3','5','6','8','0','A','B','D','E','G','J','M','N','R','T','W','X','Z','b','c','f','h','i','k','o','n','v','y'};
+        // Function to encrypt the String (QR Codes)
+        public String QrEncryption(String id)
+        {
+            var reverse = false;
+            var lastChar = id[id.Length-1]; 
+            if(RandQrChars.Contains(lastChar)){
+                reverse = true;
+            }
+
+            //remove the last character from the id
+            //since we need last character should be constant
+            //we will add it after encryption
+            id = id.Remove(id.Length-1); 
+
+
+            char[] s = id.ToCharArray();
+            int l = s.Length;
+            int b = (int) Math.Ceiling(Math.Sqrt(l));
+            int a = (int) Math.Floor(Math.Sqrt(l));
+            String encrypted = "";
+            if (b * a < l)
+            {
+                if (Math.Min(b, a) == b)
+                {
+                    b = b + 1;
+                }
+                else
+                {
+                    a = a + 1;
+                }
+            }
+        
+            // Matrix to generate the
+            // Encrypted String
+            
+
+            if(reverse){
+                char [,]arr = new char[b,a];
+                // fill the matring by reversing the id
+                int k = id.Length-1;
+            
+                // Fill the matrix row-wise
+                for (int j = 0; j < b; j++)
+                {
+                    for (int i = 0; i < a; i++)
+                    {
+                        if (k >= 0)
+                        {
+                            arr[i,j] = s[k];
+                        }
+                        k--;
+                    }
+                }
+                // Loop to generate
+                // encrypted String
+                for (int j = 0; j < b; j++)
+                {
+                    for (int i = 0; i < a; i++)
+                    {
+                        encrypted = encrypted +
+                                    arr[i, j];
+                    }
+                }
+
+
+            }
+            else{
+                char [,]arr = new char[a, b];
+                // fill the matring without reversing the id
+                int k = 0;
+            
+                // Fill the matrix row-wise
+                for (int j = 0; j < a; j++)
+                {
+                    for (int i = 0; i < b; i++)
+                    {
+                        if (k < l)
+                        {
+                            arr[j, i] = s[k];
+                        }
+                        k++;
+                    }
+
+                    
+                }
+
+                // Loop to generate
+                // encrypted String
+                for (int j = 0; j < b; j++)
+                {
+                    for (int i = 0; i < a; i++)
+                    {
+                        encrypted = encrypted +
+                                    arr[i, j];
+                    }
+                }
+            }
+        
+            
+
+            //add the last character at the end of encrypted id
+            encrypted = encrypted+lastChar;
+            return encrypted;
+        }
+
+
+        
+        // Function to decrypt the String(QR Codes)
+        public String QrDecryption(String id)
+        {
+            var reverse = false;
+            var lastChar = id[id.Length-1]; 
+            if(RandQrChars.Contains(lastChar)){
+                reverse = true;
+            }
+
+            //remove the last character from the id
+            //since we need last character should be constant
+            //we will add it after encryption
+            id = id.Remove(id.Length-1); 
+
+
+            char[] s = id.ToCharArray();
+            int l = s.Length;
+            int b = (int) Math.Ceiling(Math.Sqrt(l));
+            int a = (int) Math.Floor(Math.Sqrt(l));
+            String decrypted="";
+        
+            // Matrix to generate the
+            // Encrypted String
+            
+            // // Fill the matrix column-wise
+            // for (int j = 0; j < b; j++)
+            // {
+            //     for (int i = 0; i < a; i++)
+            //     {
+            //         if (k < l)
+            //         {
+            //             arr[j, i] = s[k];
+            //         }
+            //         k++;
+            //     }
+            // }
+        
+            // // Loop to generate
+            // // decrypted String
+            // for (int j = 0; j < a; j++)
+            // {
+            //     for (int i = 0; i < b; i++)
+            //     {
+            //         decrypted = decrypted +
+            //                     arr[i, j];
+            //     }
+            // }
+
+            if(reverse){
+                char [,]arr = new char[b,a];
+                // fill the matring by reversing the id
+                int k = id.Length-1;
+            
+                // Fill the matrix column-wise
+                for (int j = 0; j < a; j++)
+                {
+                    for (int i = 0; i < b; i++)
+                    {
+                        if (k >= 0)
+                        {
+                            arr[i,j] = s[k];
+                        }
+                        k--;
+                    }
+                }
+                // Loop to generate
+                // encrypted String
+                for (int j = 0; j < a; j++)
+                {
+                    for (int i = 0; i < b; i++)
+                    {
+                        decrypted = decrypted +
+                                    arr[i, j];
+                    }
+                }
+
+
+            }
+            else{
+                char [,]arr = new char[a, b];
+                // fill the matring without reversing the id
+                int k = 0;
+            
+                // Fill the matrix column-wise
+                for (int j = 0; j < a; j++)
+                {
+                    for (int i = 0; i < b; i++)
+                    {
+                        if (k < l)
+                        {
+                            arr[j, i] = s[k];
+                        }
+                        k++;
+                    }
+
+                    
+                }
+
+                // Loop to generate
+                // encrypted String
+                for (int j = 0; j < b; j++)
+                {
+                    for (int i = 0; i < a; i++)
+                    {
+                        decrypted = decrypted +
+                                    arr[i, j];
+                    }
+                }
+            }
+            decrypted = decrypted+lastChar;
+            return decrypted;
+        } 
 
     }
 }
