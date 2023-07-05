@@ -63,7 +63,7 @@ namespace API.Controllers
                     var rate_record = rate_limits[0];
                     if (count.Count >= rate_record.max_allowed_per_day)
                     {
-                        return NotFound("Rate limit Exceeded. Please try again Tomorrow");
+                        return NotFound("Login attempts Exceeded. Please try again Tomorrow");
                     }
 
                     // #send the otp

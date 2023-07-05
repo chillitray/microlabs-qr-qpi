@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using API.DTOs;
 using API.Middleware;
+using API.Services;
 using API.Trackers;
 using Application.Core;
 using Domain;
@@ -265,8 +266,12 @@ namespace API.Controllers
         [HttpGet("public/{qr_id}")]
         public async Task<ActionResult<ProductInfoDto>> FetchPublicQrDetails(String qr_id)
         {
+            //decrypt the qr_id
+            var utils = new Utils();
+            var decrypted = utils.QrDecryption(qr_id);
+            Console.WriteLine(decrypted);
             // verify whether the plant had a key already
-            var QrKey =await _context.QrManagement.Where(x => x.public_id == qr_id).ToListAsync();
+            var QrKey =await _context.QrManagement.Where(x => x.public_id == decrypted).ToListAsync();
             if(QrKey.Count<1){
                 return NotFound("Record not found");
             }
@@ -283,13 +288,13 @@ namespace API.Controllers
             //fetch the clients ip address           
             var ip_add = HttpContext.Connection.RemoteIpAddress.ToString();
             //create a record in QrReadActivity
-            _context.QrReadActivity.Add(
-                new QrReadActivity{
+            var read_record = new QrReadActivity{
                     qr_id = QrKey[0].qr_id,
-                    product_id = QrKey[0].product_id ?? Guid.NewGuid(),
+                    product_id = QrKey[0].product_id ?? new Guid(),
                     ip_address = ip_add
-                }
-            );
+                };
+
+            var read_activity = _context.QrReadActivity.Add(read_record);
             if(!(await _context.SaveChangesAsync()>0)){
                 return NotFound("Record not found");
             }
@@ -305,7 +310,10 @@ namespace API.Controllers
                         product_name = product.product_name,
                         product_logo = product.product_logo,
                         product_writeup = product.product_writeup,
-                        plant_location_geo = plant.plant_location_geo
+                        plant_location_geo = plant.plant_location_geo,
+                        qr_id = QrKey[0].qr_id,
+                        product_id = QrKey[0].product_id ?? new Guid(),
+                        qr_read_activity_id = read_record.qr_read_activity_id
             });
             
 

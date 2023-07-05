@@ -1,4 +1,5 @@
 using System.ServiceModel;
+using API.DTOs.Product;
 
 namespace API.Services
 {
@@ -13,5 +14,8 @@ namespace API.Services
 
         [OperationContract]
         List<String> GenerateShortUrls(String Token,int Quantity);
+
+        [OperationContract]
+        List<FetchAllProducts> FetchPlantProducts(String Token);
     }
 }

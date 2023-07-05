@@ -2,10 +2,10 @@ namespace API.DTOs
 {
     public class ProductInfoDto
     {
-        // public Guid qr_id { get; set; }
-        // public Guid? product_id { get; set; }
+        public Guid qr_id { get; set; }
+        public Guid product_id { get; set; }
+        public Guid qr_read_activity_id { get; set; }
         public String product_name { get; set; }
-        // public Guid plant_id { get; set; }
         public String plant_name { get; set; }
         public String public_id { get; set; }
         public DateTime? manufactured_date { get; set; }
