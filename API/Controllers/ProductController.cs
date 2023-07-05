@@ -45,11 +45,14 @@ namespace API.Controllers
                     product_writeup = managementDto.product_writeup,
                     product_expiry_days = managementDto.product_expiry_days,
                     product_mrp = managementDto.product_mrp,
-                    created_by = logged_user.user_id
+                    created_by = logged_user.user_id,
+                    product_logo = ""
                 }
             );
 
+            // Console.WriteLine("Step0");
             var new_obj_string = new TrackerUtils().CreateProductObj(newRecord.Entity);
+            // Console.WriteLine("Step1");
             //create a tracker record
             _context.TrackingProductActivity.Add(
                 new TrackingProductActivity{
@@ -58,6 +61,7 @@ namespace API.Controllers
                     user_id = logged_user.user_id
                 }
             );
+            // Console.WriteLine("Step2");
 
             // create a record in TrackerActivity
             var activity = _context.TrackingActivity.Add(
@@ -68,11 +72,12 @@ namespace API.Controllers
                     user_id = logged_user.user_id
                 }
             );
+            // Console.WriteLine("Step3");
 
             // #save the changes
             var result = await _context.SaveChangesAsync() >0;
             if(!result) return NotFound("Unable to create the record");
-
+            // Console.WriteLine("Step4");
             return Ok("Record created successfully");
 
         }
