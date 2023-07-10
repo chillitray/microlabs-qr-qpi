@@ -35,9 +35,30 @@ namespace Application.Plants
                 var operated_id = plant_details.operated_id;
 
                 var users = _context.User.Where(x => x.user_id == created_user | x.user_id == operated_id).Select(x => new{x.user_id,x.full_name,x.Email}).ToList();
+                var created_by_name = "";
+                var operated_by_name = "";
 
-                var created_by_name =  users.Find(x => x.user_id==created_user).full_name;
-                var operated_by_name = users.Find(x =>x.user_id == operated_id).full_name;
+                // Console.WriteLine("hello");
+                try
+                {
+                    created_by_name =  users.Find(x => x.user_id==created_user).full_name;
+                }
+                catch (System.Exception)
+                {
+                    
+                    created_by_name = "";
+                }                
+                // Console.WriteLine(created_by_name);
+                try
+                {
+                    operated_by_name = users.Find(x =>x.user_id == operated_id).full_name;
+                }
+                catch (System.Exception)
+                {
+                    
+                    operated_by_name="";
+                }                
+                // Console.WriteLine(operated_by_name);
                 var status = plant_details.status == Domain.PlantStatusOptions.ACTIVE ? "ACTIVE" : "INACTIVE";
                 var output = new PlantDetailsDto(
                     plant_details.plant_id,

@@ -6,12 +6,14 @@ namespace Application.DTOs
     {
         public ProductDetails(Guid product_id, string product_name)
         {
+            // this.date = date;
             this.product_id = product_id;
             this.product_name = product_name;
         }
 
         public Guid product_id { get; set; }
         public String product_name { get; set; }
+        // public DateTime date {get; set;}
     }
 
     public class PlantDetailsDto
