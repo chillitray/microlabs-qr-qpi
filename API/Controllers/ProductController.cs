@@ -92,6 +92,9 @@ namespace API.Controllers
             if(product==null){
                 return NotFound("invalid product_id");
             }
+            var tracker_product = product;
+            tracker_product.product_logo = product.product_logo ?? "";
+            tracker_product.product_writeup = product.product_writeup ?? "";
             var old_obj_string = new TrackerUtils().CreateProductObj(product);
 
             product.product_name = managementDto.product_name ?? product.product_name;
@@ -109,8 +112,11 @@ namespace API.Controllers
             }
 
             product.last_updated_at = DateTime.Now;
+            tracker_product = product;
+            tracker_product.product_logo = product.product_logo ?? "";
+            tracker_product.product_writeup = product.product_writeup ?? "";
 
-            var new_obj_string = new TrackerUtils().CreateProductObj(product);
+            var new_obj_string = new TrackerUtils().CreateProductObj(tracker_product);
             //create a tracker record
             _context.TrackingProductActivity.Add(
                 new TrackingProductActivity{
