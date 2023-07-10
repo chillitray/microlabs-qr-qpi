@@ -41,7 +41,7 @@ namespace Application.Admins
                     if(request.Params.sortOnField=="full_name"){
                         //sort on full_name field
                         users = users_x.OrderByDescending( x => x.full_name).Skip(skip).Take(request.Params.PageSize).ToList();
-                    }{
+                    }else{
                         //sort on joined_date field
                         users = users_x.OrderByDescending( x => x.joined_date).Skip(skip).Take(request.Params.PageSize).ToList();
                     }
@@ -51,7 +51,7 @@ namespace Application.Admins
                     if(request.Params.sortOnField=="full_name"){
                         //sort on full_name field
                         users = users_x.OrderBy( x => x.full_name).ToList();
-                    }{
+                    }else{
                         //sort on joined_date field
                         users = users_x.OrderBy( x => x.joined_date).ToList();
                     }
