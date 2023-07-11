@@ -32,8 +32,7 @@ namespace Application.Admins
                 var users_x = await _context.User.Where(x => true).ToListAsync();
 
                 // get the count of users
-                var users_count = users_x.Count();
-
+                var users_count = users_x.Count();                
                 // slice the records based on the pagination
                 var users = users_x.OrderBy(x => x.joined_date).Skip(skip).Take(request.Params.PageSize).ToList();
                 if(request.Params.Sort){
@@ -50,10 +49,11 @@ namespace Application.Admins
                     // sort in Ascending order
                     if(request.Params.sortOnField=="full_name"){
                         //sort on full_name field
-                        users = users_x.OrderBy( x => x.full_name).ToList();
+                        
+                        users = users_x.OrderBy( x => x.full_name).Skip(skip).Take(request.Params.PageSize).ToList();
                     }else{
                         //sort on joined_date field
-                        users = users_x.OrderBy( x => x.joined_date).ToList();
+                        users = users_x.OrderBy( x => x.joined_date).Skip(skip).Take(request.Params.PageSize).ToList();
                     }
 
                 }
