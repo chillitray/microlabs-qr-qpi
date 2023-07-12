@@ -310,7 +310,7 @@ namespace API.Controllers
                         product_name = product.product_name,
                         product_logo = product.product_logo,
                         product_writeup = product.product_writeup,
-                        plant_location_geo = plant.plant_location_geo,
+                        plant_location_address = plant.plant_location_address,
                         qr_id = QrKey[0].qr_id,
                         product_id = QrKey[0].product_id ?? new Guid(),
                         qr_read_activity_id = read_record.qr_read_activity_id

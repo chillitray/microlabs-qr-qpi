@@ -56,5 +56,6 @@ namespace Persistence
         public DbSet<TrackingRateLimit> TrackingRateLimit { get; set; }
         public DbSet<TrackingActivity> TrackingActivity { get; set; }
         public DbSet<RangeTable> RangeTable { get; set; }
+        public DbSet<ProductAnalyticsMetaDb> ProductAnalyticsMetaDb { get; set; }
     }
 }

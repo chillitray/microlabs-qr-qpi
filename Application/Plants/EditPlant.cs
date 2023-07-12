@@ -58,11 +58,11 @@ namespace Application.Plants
                 activity.plant_code = request.plant.plant_code ?? activity.plant_code;
                 activity.plant_description = request.plant.plant_description ?? activity.plant_description;
                 activity.plant_location_address = request.plant.plant_location_address ?? activity.plant_location_address;
-                activity.plant_location_city = request.plant.plant_location_city ?? activity.plant_location_city;
-                activity.plant_location_country = request.plant.plant_location_country ?? activity.plant_location_country;
-                activity.plant_location_geo = request.plant.plant_location_geo ?? activity.plant_location_geo;
-                activity.plant_location_pincode = request.plant.plant_location_pincode ?? activity.plant_location_pincode;
-                activity.plant_location_state = request.plant.plant_location_state ?? activity.plant_location_state;
+                // activity.plant_location_city = request.plant.plant_location_city ?? activity.plant_location_city;
+                // activity.plant_location_country = request.plant.plant_location_country ?? activity.plant_location_country;
+                // activity.plant_location_geo = request.plant.plant_location_geo ?? activity.plant_location_geo;
+                // activity.plant_location_pincode = request.plant.plant_location_pincode ?? activity.plant_location_pincode;
+                // activity.plant_location_state = request.plant.plant_location_state ?? activity.plant_location_state;
                 activity.operated_id = request.plant.operated_id ?? activity.operated_id;
                 activity.founded_on = request.plant.founded_on ?? activity.founded_on;
                 if( activity.plant_qr_limit!=0){

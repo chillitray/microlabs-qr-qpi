@@ -69,9 +69,9 @@ namespace Application.Plants
                                     plant_name=plt.plant_name,
                                     plant_code = plt.plant_code,
                                     plant_location_address = plt.plant_location_address,
-                                    plant_location_city=plt.plant_location_city,
-                                    plant_location_state=plt.plant_location_state,
-                                    plant_location_country=plt.plant_location_country,
+                                    // plant_location_city=plt.plant_location_city,
+                                    // plant_location_state=plt.plant_location_state,
+                                    // plant_location_country=plt.plant_location_country,
                                     plant_qr_limit=plt.plant_qr_limit,
                                     // plant_status=plt.status,
                                     plant_id=plt.plant_id                                    

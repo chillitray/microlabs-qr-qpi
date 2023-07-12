@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230712024018_SixMigration")]
+    partial class SixMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,38 +266,6 @@ namespace Persistence.Migrations
                     b.HasKey("plant_session_id");
 
                     b.ToTable("PlantSessionManagement");
-                });
-
-            modelBuilder.Entity("Domain.ProductAnalyticsMetaDb", b =>
-                {
-                    b.Property<Guid>("product_analytics_meta_db")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("counterfeit_scans")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("created_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("product_id")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("qr_generated")
-                        .HasColumnType("int");
-
-                    b.Property<int>("qr_printed")
-                        .HasColumnType("int");
-
-                    b.Property<int>("qr_scanned")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("updated_at")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("product_analytics_meta_db");
-
-                    b.ToTable("ProductAnalyticsMetaDb");
                 });
 
             modelBuilder.Entity("Domain.ProductManagement", b =>

@@ -160,6 +160,14 @@ namespace API.Controllers
                 }
 
 
+                // find the access_level of the user
+                var role = _context.Role.Find(user.role_id);
+                if(role == null){
+                    // Console.WriteLine(4);
+                    return NotFound("Internl error");
+                }
+
+
                 var token = _tokenService.CreateToken(user);
                 var ip_add = HttpContext.Connection.RemoteIpAddress.ToString();
                 // Console.WriteLine("Hello - IP");
@@ -220,11 +228,16 @@ namespace API.Controllers
                     return NotFound(("Failed to Login"));
                 }
 
+                
 
                 return new UserDto
                 {
                     UserId = user.user_id,
-                    Token = token
+                    Token = token,
+                    UserEmail = user.Email,
+                    UserName = user.full_name,
+                    EmpId = user.emp_id,
+                    Role = role.access_level.ToString()
                 };
             }
 

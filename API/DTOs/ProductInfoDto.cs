@@ -16,6 +16,6 @@ namespace API.DTOs
         public String batch_no { get; set; }
         public String product_logo { get; set; }
         public String product_writeup { get; set; }
-        public String plant_location_geo { get; set; }
+        public String plant_location_address { get; set; }
     }
 }
