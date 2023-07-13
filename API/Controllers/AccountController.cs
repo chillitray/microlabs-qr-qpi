@@ -237,7 +237,8 @@ namespace API.Controllers
                     UserEmail = user.Email,
                     UserName = user.full_name,
                     EmpId = user.emp_id,
-                    Role = role.access_level.ToString()
+                    Role = role.access_level.ToString(),
+                    RoleId = user.role_id
                 };
             }
 

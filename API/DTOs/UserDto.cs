@@ -8,7 +8,7 @@ namespace API.DTOs
         public String UserEmail { get; set; }
         public String EmpId { get; set; }
         public String Role { get; set; }
-
+        public Guid? RoleId { get; set; }
 
     }
 }
