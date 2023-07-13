@@ -61,6 +61,9 @@ namespace Application.Plants
                 var user_details =_context.User.Where(x => admins_ids.Contains(x.user_id)).ToList();
                 // Console.WriteLine(user_details.Count);
 
+                //fetch the plant key
+                var plantKey = _context.PlantKeyManagement.Where(x => x.status == PlantStatusOptions.ACTIVE).ToList();
+
                 List<FetchPlantsDto> plant_details_final = new List<FetchPlantsDto>();
                 // Console.WriteLine("hello");
                 foreach(Plant plt in plant_details){
@@ -89,6 +92,15 @@ namespace Application.Plants
                             
                         }
                     }
+
+                    data.plant_key_status = "INACTIVE";
+                    foreach(PlantKeyManagement key in plantKey){
+                        if(key.plant_id == plt.plant_id){
+                            data.plant_key = key.plant_key;
+                            data.plant_key_status = key.status.ToString();
+                        }
+                    }
+
 
                     plant_details_final.Add(data);
                 }

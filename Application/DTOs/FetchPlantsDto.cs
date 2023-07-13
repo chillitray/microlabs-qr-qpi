@@ -17,5 +17,7 @@ namespace Application.DTOs
         public String admin_name { get; set; }
         public String admin_emp_id { get; set; }
         public String admin_email { get; set; }
+        public String plant_key { get; set; }
+        public String plant_key_status { get; set; }
     }
 }
