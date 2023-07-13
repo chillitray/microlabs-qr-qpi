@@ -292,7 +292,7 @@ namespace API.Controllers
         {
             var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
 
-            //fetch the use details from the db
+            //fetch the user details from the db
             var users = _context.User.Where(x => x.user_id == details.user_id).ToList();
             if (users.Count < 1)
             {
@@ -373,6 +373,69 @@ namespace API.Controllers
             if (!result) return NotFound("Unable to update the user status");
 
             return Ok("User status updated successfully");
+        }
+
+
+
+        [CustomAuthorization(AccessLevelsDto.ADMIN)]
+        [HttpGet("unassigned/")]
+        public async Task<PagedResult<List<FetchUnassignedManagersDto>>> GetUnassignedPlantManagers([FromQuery] PagingParams param) //[FromQuery]PagingParams param
+        {
+                //  this api fetches all the plant managers who are not assigned to any plants
+
+                var logged_user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
+                var skip = (param.pageNumber - 1) * param.PageSize ;
+
+                //fetch all the plant_manager role_ids
+                var role_ids_db = _context.Role.Where(x => x.access_level == AccessLevelOptions.PLANT_MANAGER & x.status == StatusOptions.ACTIVE).Select(x=>x.role_id).ToList();
+                Console.WriteLine(role_ids_db.Count());
+                //  fetch all the users from the db
+                var users_x = await _context.User.Where(x => role_ids_db.Contains(x.role_id) & x.status != USerStatusOptions.BLOCKED ).Where(x => x.plant_id == null).ToListAsync();
+
+                // get the count of users
+                var users_count = users_x.Count();                
+                // slice the records based on the pagination
+                var users = users_x.OrderBy(x => x.joined_date).Skip(skip).Take(param.PageSize).ToList();
+                if(param.Sort){
+                    //sort in Descending order
+                    if(param.sortOnField=="full_name"){
+                        //sort on full_name field
+                        users = users_x.OrderByDescending( x => x.full_name).Skip(skip).Take(param.PageSize).ToList();
+                    }else{
+                        //sort on joined_date field
+                        users = users_x.OrderByDescending( x => x.joined_date).Skip(skip).Take(param.PageSize).ToList();
+                    }
+
+                }else{
+                    // sort in Ascending order
+                    if(param.sortOnField=="full_name"){
+                        //sort on full_name field
+                        
+                        users = users_x.OrderBy( x => x.full_name).Skip(skip).Take(param.PageSize).ToList();
+                    }else{
+                        //sort on joined_date field
+                        users = users_x.OrderBy( x => x.joined_date).Skip(skip).Take(param.PageSize).ToList();
+                    }
+
+                }
+
+
+                List<FetchUnassignedManagersDto> admins_details = new List<FetchUnassignedManagersDto>();
+                foreach(User user in users)
+                {
+                    var data = new FetchUnassignedManagersDto{
+                        user_id = user.user_id,
+                        email = user.Email,
+                        emp_id = user.emp_id,
+                        full_name = user.full_name,
+                    };
+                    admins_details.Add(data);
+                }
+
+                
+
+                return PagedResult<List<FetchUnassignedManagersDto>>.Success(admins_details,param.pageNumber,param.PageSize,users_count);
         }
     }
 }

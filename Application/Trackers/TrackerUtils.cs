@@ -37,7 +37,7 @@ namespace Application.Trackers
                 // plant_location_geo = record.plant_location_geo,
                 plant_qr_limit = record.plant_qr_limit,
                 created_by = record.created_by,
-                operated_id = record.operated_id,
+                operated_id = record?.operated_id ?? Guid.Empty,
                 status = record.status,
                 founded_on = record.founded_on,
                 created_at = record.created_at,

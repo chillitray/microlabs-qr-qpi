@@ -26,4 +26,12 @@ namespace Application.DTOs
         public DateTime? last_login_date { get; set; }
         public bool me { get; set; } = false;
     }
+
+    public class FetchUnassignedManagersDto
+    {
+        public Guid user_id { get; set; }        
+        public String email { get; set; }        
+        public String emp_id { get; set; }
+        public String full_name { get; set; }
+    }
 }

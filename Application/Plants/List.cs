@@ -96,6 +96,7 @@ namespace Application.Plants
                     data.plant_key_status = "INACTIVE";
                     foreach(PlantKeyManagement key in plantKey){
                         if(key.plant_id == plt.plant_id){
+                            data.plant_key_id = key.plant_key_id;
                             data.plant_key = key.plant_key;
                             data.plant_key_status = key.status.ToString();
                         }
